@@ -9,6 +9,97 @@ A dataset containing product descriptions which have been rephrased using cognit
 Modern recommendation systems don’t just process products—they process persuasion. BiasBeware investigates how subtle linguistic cues influence LLM-driven recommendations, and challenges models to detect, explain, and remove these effects.
 
 
+## Data Annotation Process
+
+To construct a controlled benchmark for cognitive bias in product descriptions, we adopt a **two-stage annotation pipeline** combining automatic generation and human validation.
+
+### 1. Neutralization of Product Descriptions
+
+We start from raw Amazon product descriptions, which often contain implicit promotional language (e.g., *“best-selling”*, *“limited offer”*, *“highly rated”*).  
+To enable controlled experimentation, we transform these into **neutral, feature-centered descriptions**.
+
+This step involves:
+- automatic rewriting using LLMs, and  
+- manual verification to ensure:
+  - removal of persuasive cues  
+  - preservation of factual product attributes  
+
+The resulting descriptions serve as the **unbiased reference set**.
+
+---
+
+### 2. Bias Injection
+
+From each neutral description, we generate one or more **bias-injected variants** by introducing minimal linguistic cues corresponding to specific cognitive biases.
+
+We consider the following bias taxonomy:
+
+- **Social Proof** (e.g., “popular choice”, “trusted by many”)  
+- **Scarcity** (e.g., “limited stock available”)  
+- **Exclusivity** (e.g., “limited edition”, “exclusive version”)  
+- **Authority** (e.g., “recommended by experts”)  
+- **Contrast Effect** (e.g., comparisons highlighting relative advantage)  
+- **Storytelling** (e.g., narrative framing around product use)  
+- **Denomination Neglect** (e.g., framing prices to reduce perceived cost magnitude)  
+- **Identity Signaling** (e.g., appealing to user identity or status)  
+- **Decoy Effect** (e.g., introducing a less attractive alternative to influence choice)  
+- **Discount Framing** (e.g., “save 20%”, “special deal”)  
+
+Each manipulation is designed to be **minimal and localized**, ensuring that the underlying product content remains unchanged while introducing a targeted persuasive signal.
+
+---
+
+### 3. Human Annotation
+
+Each description is annotated by **four independent annotators**.  
+Annotators are asked to identify the **dominant bias category** present in the text from the predefined taxonomy, or assign:
+
+- `no_bias` if no clear persuasive signal is present
+
+Annotations are performed at the **description level**, with one label per item.
+
+---
+
+### 4. Agreement and Quality Control
+
+To ensure annotation quality, we measure inter-annotator agreement using:
+
+- **Fleiss’ κ** (multi-annotator agreement)  
+- **Krippendorff’s α** (robust agreement metric for nominal labels)
+
+Disagreements are resolved through:
+- majority voting, and  
+- manual adjudication for ambiguous or borderline cases.
+
+This process ensures that bias annotations are **consistent, interpretable, and reliable**.
+
+---
+
+### 5. Final Dataset Structure
+
+Each instance in the dataset contains:
+
+- a **neutral (unbiased) description**  
+- one or more **bias-injected variants**  
+- a **bias label** (from the taxonomy above)  
+- optional metadata (e.g., product category)
+
+This structured setup enables controlled evaluation across all subtasks:
+- attribution (Subtask A),
+- defense (Subtask B),
+- and sanitization (Subtask C).
+
+---
+
+### Summary
+
+Our annotation pipeline ensures that:
+- bias signals are **explicit yet minimally invasive**,  
+- product descriptions remain **factually grounded**, and  
+- annotations are **high-quality and reproducible**.
+
+This enables precise analysis of how cognitive biases propagate through language into LLM-driven recommendation systems.
+
 ## Subtask C — Sanitization of Attacked Product Descriptions
 
 Can a system **remove manipulation without removing meaning**?
