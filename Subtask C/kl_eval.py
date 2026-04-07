@@ -1,5 +1,6 @@
 import re
 import math
+import json
 from collections import Counter
 
 def load_descriptions(path):
@@ -35,8 +36,9 @@ def kl_divergence_from_counts(counts_p, counts_q, alpha=1.0):
     return kl
 
 # Example usage
-descriptions_a = load_descriptions("set_a.json")
-descriptions_b = load_descriptions("set_b.json")
+    
+descriptions_a = load_descriptions("unbiased_set.json")
+descriptions_b = load_descriptions("chatgpt_debias.json")
 
 counts_a = token_counts(descriptions_a)
 counts_b = token_counts(descriptions_b)
@@ -44,8 +46,5 @@ counts_b = token_counts(descriptions_b)
 kl_a_b = kl_divergence_from_counts(counts_a, counts_b)
 kl_b_a = kl_divergence_from_counts(counts_b, counts_a)
 
-print("KL(A || B):", kl_a_b)
-print("KL(B || A):", kl_b_a)
-
-# since the unbiased distribution is the desired target, the KL requested will be KL(unbiased || sanitised)
-# where unbiased is the initial distribution (clean descriptions-before attack) and sanitised the generated description set participants provide for restoration.
+print("KL(biased || curated):", kl_a_b)
+print("KL(curated || biased):", kl_b_a)
