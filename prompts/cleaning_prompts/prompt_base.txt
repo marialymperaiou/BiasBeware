@@ -1,0 +1,9 @@
+
+prompt base: 
+"I am working on a project where I have to create literal unbiased product descriptions. The descriptions should be based on features only, without any marketing cues or biases that aim to influence towards product purchase." 
+technical emphasis: 
+"The descriptions should be neutral and factual, suitable for an objective database or technical specification page, without hyperbolic language and marketing claims." 
+length: 
+"The text should be about 1-3 short paragraphs." 
+amazon listing emphasis: 
+"Describe the product to the customer using language that could potentially be found in an amazon product listing. However, do not repeat or add any language that employs marketing tactics."
