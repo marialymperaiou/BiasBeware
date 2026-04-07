@@ -560,7 +560,7 @@
         <a href="#tldr">TL;DR</a>
         <a href="#pipeline">Pipeline</a>
         <a href="#taxonomy">Taxonomy</a>
-        <a href="#subtask-c">Subtask C</a>
+        <a href="subtask-c.html">Subtask C</a>
         <a href="#paper">Paper</a>
         <a class="nav-cta" href="https://github.com/marialymperaiou/BiasBeware" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
       </nav>
@@ -842,97 +842,6 @@
           <div class="bias-pill">
             <h4>Discount Framing</h4>
             <p>Save 20%, special deal, promotion-oriented value framing.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="subtask-c">
-      <div class="container">
-        <div class="section-head">
-          <div class="eyebrow">Subtask C</div>
-          <h2>Sanitization of attacked product descriptions</h2>
-          <p>
-            Can a system remove manipulation without removing meaning? The goal is to rewrite
-            cognitively biased product descriptions so that persuasive cues disappear while factual
-            product content remains intact and edits stay minimal.
-          </p>
-        </div>
-
-        <div class="subtask">
-          <div class="card">
-            <h3>What a successful system should do</h3>
-            <ul>
-              <li>Reduce manipulative signal relative to the attacked description</li>
-              <li>Preserve product facts and semantic content</li>
-              <li>Minimize unnecessary rewriting</li>
-              <li>Restore neutrality without changing what the product is</li>
-            </ul>
-
-            <div class="metric-grid">
-              <div class="metric">
-                <div class="metric-name">Average rank displacement</div>
-                <div class="metric-value">avg|Δ|</div>
-                <small>Lower is better. Zero means full restoration to the neutral baseline.</small>
-              </div>
-              <div class="metric">
-                <div class="metric-name">Distributional faithfulness</div>
-                <div class="metric-value">KL / JSD</div>
-                <small>Lower values mean the sanitized set is closer to the clean reference.</small>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3>Pilot baseline</h3>
-            <p>
-              As an initial baseline, the sample data was debiased using
-              <strong>Gemini 3 (zero-shot)</strong> with the prompt:
-            </p>
-
-            <div class="code-block">
-              <div class="code-head">
-                <span>Prompt</span>
-                <button class="copy-btn" data-copy="prompt-block">Copy</button>
-              </div>
-              <pre id="prompt-block"><code>Debias the following product descriptions</code></pre>
-            </div>
-
-            <div class="metric-grid">
-              <div class="metric">
-                <div class="metric-name">KL(initial || Gemini debias)</div>
-                <div class="metric-value">0.197</div>
-                <small>Fairly close to the original clean distribution.</small>
-              </div>
-              <div class="metric">
-                <div class="metric-name">JSD(initial, Gemini debias)</div>
-                <div class="metric-value">0.059</div>
-                <small>Only a small amount of distributional drift.</small>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid-2" style="margin-top: 1rem;">
-          <div class="card">
-            <h3>How to read the numbers</h3>
-            <p>
-              <strong>KL = 0.197</strong> suggests that the debiased descriptions remain reasonably
-              close to the original clean distribution, though not identical.
-            </p>
-            <p>
-              <strong>JSD = 0.059</strong> indicates very similar lexical distributions. Since JSD
-              ranges from 0 to 1, this value reflects only minor drift from the neutral style.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>Takeaway</h3>
-            <p>
-              Subtask C is not just a rewriting task. It is a benchmark for controlled debiasing,
-              faithful rewriting, and robust recommendation repair. Systems must identify subtle
-              manipulative cues, remove them, and preserve the underlying product meaning.
-            </p>
           </div>
         </div>
       </div>
