@@ -100,6 +100,13 @@ Our annotation pipeline ensures that:
 
 This enables precise analysis of how cognitive biases propagate through language into LLM-driven recommendation systems.
 
+---
+### Pilot data annotation
+
+We embed cognitive biases in the most explicit way, to evaluate the validity of downstream baselines on the most 'obviously'  biased descriptions. Our 4 trained annotators achieve perfect agreement (100\% Fleiss’ κ and Krippendorff’s α), showing that the cognitive bias identification stage is easy for humans exposed in such information. This stage confirms that ChatGPT 5.4 did an excellent job in imbuing cognitive biases within product descriptions.
+
+---
+
 ## Subtask C — Sanitization of Attacked Product Descriptions
 
 Can a system **remove manipulation without removing meaning**?
