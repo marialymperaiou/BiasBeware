@@ -22,7 +22,7 @@ def jensen_shannon_divergence_from_counts(counts_p, counts_q, alpha=1.0, base=2)
 
 
 descriptions_a = load_descriptions("unbiased_set.json")
-descriptions_b = load_descriptions("chatgpt_debias.json")
+descriptions_b = load_descriptions("debiased_set.json")
 
 counts_a = token_counts(descriptions_a)
 counts_b = token_counts(descriptions_b)
