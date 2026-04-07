@@ -1,8 +1,9 @@
-![BiasBeware painting showing preference for the DSLR with a 25% discount over a non-discounted DSLR](teaser.png)
-
 # BiasBeware
 
 A dataset containing product descriptions which have been rephrased using cognitive biases.
+
+![BiasBeware painting showing preference for the DSLR with a 25% discount over a non-discounted DSLR](teaser.png)
+
 
 ## Subtask C — Sanitization of Attacked Product Descriptions
 
