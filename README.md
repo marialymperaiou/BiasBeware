@@ -26,9 +26,9 @@ Does the rewritten description reduce the ranking distortion caused by the attac
 
 We measure this using average rank displacement:
 
-\[
-\mathrm{avg}|\Delta|
-\]
+```
+avg|Δ|
+```
 
 Lower is better.  
 A value of **0** means the attacked product’s position has been fully restored to the neutral baseline.
@@ -38,9 +38,9 @@ Does the rewritten text move back toward the original neutral description distri
 
 We measure this using **KL divergence** between the token distribution of the sanitized set and the original clean set:
 
-\[
-D_{\mathrm{KL}}(P_{\text{initial}} \parallel P_{\text{sanitized}})
-\]
+```
+KL(initial || sanitized)
+```
 
 where:
 - \(P_{\text{initial}}\) = the distribution of the original clean descriptions
@@ -53,15 +53,11 @@ where:
 
 Complementarily: We also report **Jensen–Shannon divergence (JSD)** as a symmetric, bounded companion metric:
 
-\[
-\mathrm{JSD}(P_{\text{initial}}, P_{\text{sanitized}})
-\]
+```
+JSD(initial || sanitized)
 
-With base-2 logarithms:
-
-\[
-0 \leq \mathrm{JSD} \leq 1
-\]
+0 ≤ JSD(initial, sanitized) ≤ 1
+```
 
 - **0** = identical distributions  
 - values closer to **0** = highly similar  
