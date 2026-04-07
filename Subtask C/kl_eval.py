@@ -38,7 +38,7 @@ def kl_divergence_from_counts(counts_p, counts_q, alpha=1.0):
 # Example usage
     
 descriptions_a = load_descriptions("unbiased_set.json")
-descriptions_b = load_descriptions("chatgpt_debias.json")
+descriptions_b = load_descriptions("debiased_set.json")
 
 counts_a = token_counts(descriptions_a)
 counts_b = token_counts(descriptions_b)
@@ -46,5 +46,8 @@ counts_b = token_counts(descriptions_b)
 kl_a_b = kl_divergence_from_counts(counts_a, counts_b)
 kl_b_a = kl_divergence_from_counts(counts_b, counts_a)
 
-print("KL(biased || curated):", kl_a_b)
-print("KL(curated || biased):", kl_b_a)
+print("KL(unbiased || debiased):", kl_a_b) # this is primarily used for evaluation
+print("KL(debiased || unbiased):", kl_b_a)
+
+# how much of the initial (unbiased) target distribution is still not recovered after debias?
+# this is measured by KL(debiased || unbiased), therefore this is the primary evaluation metric
