@@ -4,6 +4,10 @@ A dataset containing product descriptions which have been rephrased using cognit
 
 ![BiasBeware painting showing preference for the DSLR with a 25% discount over a non-discounted DSLR](teaser.png)
 
+**When words nudge decisions**
+
+Modern recommendation systems don’t just process products—they process persuasion. BiasBeware investigates how subtle linguistic cues influence LLM-driven recommendations, and challenges models to detect, explain, and remove these effects.
+
 
 ## Subtask C — Sanitization of Attacked Product Descriptions
 
