@@ -46,3 +46,6 @@ kl_b_a = kl_divergence_from_counts(counts_b, counts_a)
 
 print("KL(A || B):", kl_a_b)
 print("KL(B || A):", kl_b_a)
+
+# since the unbiased distribution is the desired target, the KL requested will be KL(unbiased || sanitised)
+# where unbiased is the initial distribution (clean descriptions-before attack) and sanitised the generated description set participants provide for restoration.
