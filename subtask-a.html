@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BiasBeware | Subtask A</title>
+  <meta
+    name="description"
+    content="BiasBeware Subtask A: Counterfactual attribution of ranking changes caused by cognitive-bias attacks."
+  />
+  <meta property="og:title" content="BiasBeware | Subtask A" />
+  <meta
+    property="og:description"
+    content="Can a system identify which product description caused a recommendation shift?"
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="A.png" />
+  <meta name="theme-color" content="#0b1020" />
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: rgba(255, 255, 255, 0.05);
+      --card: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: #e9eefb;
+      --muted: #b6c1de;
+      --accent: #8ab4ff;
+      --accent-2: #75f0c5;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 20px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(117, 240, 197, 0.12), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(138, 180, 255, 0.16), transparent 35%),
+        linear-gradient(180deg, #07111f 0%, #0a1324 48%, #07101b 100%);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(7, 17, 31, 0.72);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-inner {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #09101d;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 10px 30px rgba(117, 240, 197, 0.2);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      padding: 0.72rem 1rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), #6f8cff);
+      color: #08111f !important;
+      font-weight: 800;
+      box-shadow: 0 14px 30px rgba(138, 180, 255, 0.25);
+    }
+
+    section {
+      padding: 2.5rem 0 1rem;
+    }
+
+    .hero {
+      padding: 4rem 0 2rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      color: var(--accent-2);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.78rem;
+      margin-bottom: 0.6rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1;
+      margin: 0 0 1rem;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      font-size: 1.12rem;
+      color: var(--muted);
+      margin: 0;
+      max-width: 720px;
+    }
+
+    .image-card,
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .image-card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .image-card .caption {
+      padding: 1rem 1.2rem 1.2rem;
+      color: var(--muted);
+      font-size: 0.96rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-head {
+      margin-bottom: 1.25rem;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 760px;
+      margin: 0.75rem 0 0;
+    }
+
+    .card {
+      padding: 1.35rem;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.7rem;
+      font-size: 1.1rem;
+    }
+
+    .card p,
+    .card li {
+      color: var(--muted);
+    }
+
+    .card ul {
+      padding-left: 1.1rem;
+      margin: 0.8rem 0 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .metric {
+      padding: 1.1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+
+    .metric .metric-name {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .metric .metric-value {
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .metric small {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 3rem 0 4rem;
+      color: var(--muted);
+    }
+
+    .footer-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 1.4rem;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 3rem;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-mark">B</div>
+        <div>BiasBeware</div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html#overview">Overview</a>
+        <a href="index.html#pipeline">Pipeline</a>
+        <a href="index.html#taxonomy">Taxonomy</a>
+        <a href="subtask-a.html" class="active">Subtask A</a>
+        <a href="subtask-b.html">Subtask B</a>
+        <a href="subtask-c.html">Subtask C</a>
+        <a href="index.html#paper">Paper</a>
+        <a class="nav-cta" href="https://github.com/marialymperaiou/BiasBeware" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">BiasBeware · Subtask A</div>
+            <h1>Counterfactual Attribution</h1>
+            <p class="lead">
+              Can a system identify which product description is causally responsible for an
+              observed recommendation shift? Subtask A focuses on attribution: given competing
+              descriptions and a change in ranking direction, participants must determine which
+              description triggered the effect.
+            </p>
+          </div>
+
+          <div class="image-card">
+            <img src="A.png" alt="Illustration for Subtask A counterfactual attribution" />
+            <div class="caption">
+              Subtask A asks which description caused the ranking change.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Goal</div>
+          <h2>Identify the source of the ranking change</h2>
+          <p>
+            Participants receive two potentially attacked candidate descriptions together with the
+            observed direction of a ranking change. The task is to determine which description is
+            causally responsible for the outcome, or whether attribution is uncertain.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Prediction space</h3>
+            <ul>
+              <li><strong>A</strong> — description A caused the ranking effect</li>
+              <li><strong>B</strong> — description B caused the ranking effect</li>
+              <li><strong>Uncertain</strong> — both or neither contain a clearly attributable signal</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Why this is challenging</h3>
+            <p>
+              Attribution is non-trivial because inserted bias intensity varies from subtle to
+              strong, and different bias categories may interact or have heterogeneous effects on
+              recommendation behavior. The task therefore tests more than surface detection: it
+              requires causal semantic reasoning about how wording changes outcomes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Evaluation</div>
+          <h2>Three-label causal classification</h2>
+          <p>
+            Subtask A is evaluated as a three-label classification problem reflecting the causal
+            link between candidate descriptions and observed ranking changes.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Primary metric</h3>
+            <div class="metric-grid">
+              <div class="metric">
+                <div class="metric-name">Macro-F1</div>
+                <div class="metric-value">F1</div>
+                <small>
+                  Macro-F1 rewards balanced performance across all three labels and ensures that
+                  systems do not ignore the harder uncertain cases.
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Evaluation principle</h3>
+            <p>
+              Strong systems should not simply detect whether a description sounds persuasive.
+              They must identify whether that description is actually responsible for the observed
+              ranking movement under the given recommendation setting.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Interpretation</div>
+          <h2>What success looks like</h2>
+          <p>
+            A strong Subtask A model should separate mere bias presence from causal responsibility.
+            It should correctly attribute rank changes even when interventions are subtle, mixed,
+            or ambiguous, making this subtask a benchmark for explanation-grounded reasoning in
+            LLM-based recommendation.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Good attribution behavior</h3>
+            <ul>
+              <li>Correctly identifies the responsible description when the signal is clear</li>
+              <li>Handles subtle and medium-strength attacks robustly</li>
+              <li>Uses the <strong>Uncertain</strong> label appropriately in ambiguous cases</li>
+              <li>Reasons about outcome causality, not just persuasive wording in isolation</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Future results</h3>
+            <p>
+              Baseline and leaderboard results will appear here once the benchmark evaluation is
+              finalized. For now, this page documents the task objective and official scoring
+              setup for participants.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <div class="container">
+        <div class="footer-card">
+          <h3 style="margin-top: 0;">Back to BiasBeware</h3>
+          <p>
+            Return to the main page for the full dataset overview, annotation pipeline, taxonomy,
+            and paper reference.
+          </p>
+          <p style="margin-bottom: 0;">
+            <a href="index.html" style="font-weight: 800; color: var(--text);">Open main page →</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
