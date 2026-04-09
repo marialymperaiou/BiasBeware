@@ -107,6 +107,41 @@ We embed cognitive biases in the most explicit way, to evaluate the validity of 
 
 ---
 
+## Subtask B — Defense Against Attack
+
+Can a system **maintain fair recommendations under manipulated descriptions**?
+
+In **Subtask B**, participants are given recommendation settings with competing products where one or more descriptions may have been attacked using cognitive-bias cues. The original pre-attack ranking is provided, and the objective is to reduce unfair rank shifts caused by manipulated language.
+
+This is a **robustness** task: a successful system should:
+- detect or neutralize the effect of biased product descriptions,
+- preserve the integrity of the original recommendation ordering,
+- remain robust across different recommendation settings and attack styles,
+- and generalize beyond a single exposed recommender or prompt setup.
+
+### What we evaluate
+
+We evaluate defense through rank restoration:
+
+```
+avg|Δ|
+```
+
+Lower is better.  
+Smaller values indicate that the defended system keeps the post-attack ranking closer to the original unbiased ordering.
+
+For the descriptive pilot analysis below, we additionally report two auxiliary quantities:
+- **appearance-rate delta**, measured in **percentage points (pp)**,
+- and **average-position delta**, measured in **ranking positions**.
+
+For average-position delta, **negative** values indicate movement toward the top of the ranking, while **positive** values indicate movement downward.
+
+### Pilot observations
+
+Preliminary **Subtask B** experiments with **Qwen3-0.6B** show that cognitive-bias attacks do not produce a single uniform distortion pattern; instead, each attack family perturbs recommendation behavior differently, in line with the broader trends reported in our EMNLP 2025 paper. **Social proof** is the most volatile intervention: it yields the strongest single **appearance-rate delta** (**+40.00 pp**), but its mean **appearance-rate delta** is almost neutral (**+0.71 pp**) because strong gains are offset by drops of up to **-15.00 pp**. Its **average-position delta** is similarly polarized, ranging from clear ranking improvements (**-1.15** and **-0.81** positions) to substantial degradations (**+1.67** and **+1.28** positions). **Exclusivity** is less extreme but more consistently harmful to ordering: although it increases the mean **appearance-rate delta** by **+5.13 pp**, its mean **average-position delta** is **+0.31 positions**, showing that added visibility often fails to translate into better placement and may even coincide with joint deterioration (**-4.09 pp** in appearance rate and **+0.86 positions** in average position). **Discount framing** appears comparatively milder and more stable, producing the largest mean **appearance-rate delta** (**+6.43 pp**) and no appearance drops across the valid targets, yet its mean **average-position delta** remains slightly adverse (**+0.11 positions**) because a few negative cases offset several small improvements. Overall, these pilot results suggest that Subtask B should reward defenses that are robust not only to obvious visibility inflation, but also to subtler cases where appearance rate and ranking move in different directions.
+
+---
+
 ## Subtask C — Sanitization of Attacked Product Descriptions
 
 Can a system **remove manipulation without removing meaning**?
