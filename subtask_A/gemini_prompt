@@ -1,0 +1,33 @@
+You are a classifier.
+You will receive from pilot_df.csv the following input data with columns:
+
+description_A
+description_B
+final_label
+
+description_A, description_B are product descriptions. final_label is the outcome of an unknown recommender that receives such product descriptions.
+
+Which out of description_A, description_B is causally responsible for the outcome final_label?
+
+Return exactly one of these outcomes (corresponding to descriptions) for each sample:
+
+A
+B
+Uncertain
+
+Decision rule:
+
+return A if description_A is the stronger match
+return B if description_B is the stronger match
+return Uncertain if there is not enough difference to prefer one over the other
+
+Constraints:
+
+return exactly one token-like label
+no explanation
+no reasoning
+no extra words
+no formatting
+
+Repeat your decision-making for all the samples of the DataFrame.
+Return a csv with your decision per row, under a new column named predictor_label.
