@@ -428,35 +428,76 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Evaluation</div>
-          <h2>Distributional faithfulness to the clean reference</h2>
+          <h2>Restoration toward the clean reference</h2>
           <p>
-            We evaluate sanitization through how closely the rewritten descriptions return to the
-            original clean distribution.
+            We evaluate sanitization both at the <strong>distribution level</strong> and at the
+            <strong>instance level</strong>, measuring whether rewritten descriptions return toward
+            the clean reference corpus and remain close to their original clean counterparts.
           </p>
         </div>
 
-        <div class="card">
-          <h3>Primary metric: KL divergence</h3>
-          <p>
-            Does the rewritten text move back toward the original neutral description distribution?
-          </p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Primary metric: KL divergence</h3>
+            <p>
+              Does the rewritten text move back toward the original neutral description distribution?
+            </p>
 
-          <div class="metric-grid">
-            <div class="metric">
-              <div class="metric-name">KL(initial || sanitized)</div>
-              <div class="metric-value">KL</div>
-              <small>Lower values mean the sanitized set is lexically closer to the clean reference.</small>
+            <div class="metric-grid">
+              <div class="metric">
+                <div class="metric-name">KL(initial || sanitized)</div>
+                <div class="metric-value">KL</div>
+                <small>Lower values mean the sanitized set is lexically closer to the clean reference.</small>
+              </div>
             </div>
+
+            <p style="margin-top: 1rem;">
+              <strong>Interpretation:</strong> <span>\(D_{\mathrm{KL}} = 0\)</span> means the two distributions are identical.
+            </p>
+
+            <p>
+              KL is the <strong>primary metric</strong> because Subtask C is fundamentally a
+              restoration task: the goal is not only to produce plausible neutral text, but to move
+              the rewritten corpus back toward the original unbiased distribution.
+            </p>
           </div>
 
-          <p><strong>Interpretation:</strong> <span>\(D_{\mathrm{KL}} = 0\)</span> means the two distributions are identical.</p>
+          <div class="card">
+            <h3>Complementary metric: pairwise normalized Levenshtein similarity</h3>
+            <p>
+              Does the rewritten text remain close to the original clean description at the
+              <strong>individual example level</strong>?
+            </p>
+
+            <div class="metric-grid">
+              <div class="metric">
+                <div class="metric-name">Avg. normalized Levenshtein similarity</div>
+                <div class="metric-value">LevSim</div>
+                <small>Higher values mean fewer edits are needed to recover the clean description.</small>
+              </div>
+              <div class="metric">
+                <div class="metric-name">Range</div>
+                <div class="metric-value">0–1</div>
+                <small>1.0 means identical strings; values closer to 0 indicate more extensive rewriting.</small>
+              </div>
+            </div>
+
+            <p style="margin-top: 1rem;">
+              Levenshtein similarity complements KL because the two metrics capture different aspects
+              of restoration: KL evaluates whether the <strong>set</strong> of rewritten descriptions
+              returns toward the clean distribution, while Levenshtein evaluates whether
+              <strong>each individual description</strong> remains close to its clean target.
+            </p>
+          </div>
         </div>
 
         <div class="card" style="margin-top: 1rem;">
-          <h3>What we provide</h3>
+          <h3>Why both metrics matter</h3>
           <p>
-            A <strong>KL</strong> calculation function is provided to participants for direct
-            evaluation of their rewritten descriptions.
+            A system could recover a good corpus-level distribution while still rewriting many
+            examples too aggressively. Conversely, it could preserve local wording while failing to
+            restore the broader neutral distribution. Reporting both metrics gives a more complete
+            picture of sanitization quality.
           </p>
         </div>
       </div>
@@ -490,30 +531,37 @@
               <div class="metric">
                 <div class="metric-name">KL(initial || Gemini debias)</div>
                 <div class="metric-value">0.197</div>
-                <small>The debiased descriptions remain fairly close to the original clean distribution.</small>
+                <small>The debiased descriptions move reasonably close to the original clean distribution.</small>
+              </div>
+              <div class="metric">
+                <div class="metric-name">Avg. normalized Levenshtein similarity</div>
+                <div class="metric-value">0.304</div>
+                <small>The rewritten outputs remain only moderately close in surface form to the clean references.</small>
               </div>
             </div>
           </div>
         </div>
 
         <div class="card" style="margin-top: 1rem;">
-          <h3>Pilot setup</h3>
+          <h3>How to read these numbers</h3>
           <p>
-            200 biased descriptions vs their unbiased counterparts.
-            All biases stem from <strong>intense intervention</strong> (i.e. level 3), thus being easily detectable.
-            As confirmed by the human annotations, people can recognize these biases with 100% accuracy.
-          </p>
-
-          <h3>How to read this number</h3>
-          <p>
-            The pilot value is encouragingly low. <strong>KL = 0.197</strong> means the debiased
-            descriptions are still fairly close to the original clean distribution, though not
-            identical.
+            These values are encouraging, but they also reveal the difficulty of the task.
+            <strong>KL = 0.197</strong> indicates that the debiased descriptions move reasonably
+            close to the original clean distribution at the corpus level.
           </p>
           <p>
-            In simple terms, the baseline is able to remove some bias while staying reasonably
-            close to the original clean style. Are these baseline metrics going to stay promising
-            under more diverse and complex attacks to come? Stay tuned!
+            <strong>Average pairwise normalized Levenshtein similarity = 0.304</strong> indicates
+            that, at the level of paired descriptions, the rewritten outputs are still only
+            moderately close in surface form to the clean references.
+          </p>
+          <p>
+            Taken together, these metrics suggest that the baseline is able to
+            <strong>partially restore neutrality</strong>, but often does so through fairly
+            substantial rewriting rather than minimal correction.
+          </p>
+          <p>
+            In simple terms: <strong>the baseline appears to recover the overall clean style better
+            than it recovers the original clean wording of each individual description</strong>.
           </p>
         </div>
       </div>
@@ -523,7 +571,7 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Takeaway</div>
-          <h2>Controlled debiasing and distribution-preserving sanitization</h2>
+          <h2>Controlled debiasing, faithful rewriting, and text restoration</h2>
           <p>
             Subtask C is about more than rewriting text. It is about restoring neutrality without
             destroying content.
@@ -536,16 +584,21 @@
             <ul>
               <li>Identify and remove subtle manipulative cues</li>
               <li>Preserve product facts and product identity</li>
-              <li>Return the description distribution toward the neutral baseline</li>
+              <li>Restore the description distribution toward the neutral baseline</li>
+              <li>Make as few unnecessary edits as possible</li>
             </ul>
           </div>
 
           <div class="card">
             <h3>Why it is important</h3>
             <p>
-              This makes Subtask C a benchmark for <strong>controlled debiasing</strong>,
+              A strong system should not only sound neutral in aggregate, but should also remain
+              close to the original clean reference for each product whenever possible.
+            </p>
+            <p>
+              Overall, Subtask C is a benchmark for <strong>controlled debiasing</strong>,
               <strong>faithful rewriting</strong>, and
-              <strong>distribution-preserving sanitization</strong>.
+              <strong>distribution-preserving text restoration</strong>.
             </p>
           </div>
         </div>
