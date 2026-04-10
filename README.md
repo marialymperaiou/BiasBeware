@@ -373,53 +373,75 @@ In other words, the ideal system should keep *what the product is*, while removi
 
 ### What we evaluate
 
-We evaluate sanitization through **distributional faithfulness to the clean reference**.
+We evaluate sanitization through **restoration toward the clean reference**, both at the **distribution level** and at the **instance level**.
 
 #### Primary metric: KL divergence
+
 Does the rewritten text move back toward the original neutral description distribution?
 
 We measure this using **KL divergence** between the token distribution of the sanitized set and the original clean set:
 
 KL(initial || sanitized)
 
-
 where:
 - \(P_{\text{initial}}\) = the distribution of the original clean descriptions
 - \(P_{\text{sanitized}}\) = the distribution of the participant’s rewritten descriptions
 
-**Interpretation:**  
+**Interpretation:**
 - \(D_{\mathrm{KL}} = 0\) means the two distributions are identical
-- Lower values mean the sanitized descriptions are lexically closer to the clean reference
-- Higher values mean more drift from the original neutral style
+- lower values mean the sanitized descriptions are lexically closer to the clean reference
+- higher values mean more drift from the original neutral style
 
+KL is our **primary metric** because Subtask C is fundamentally a **restoration task**. The objective is not only to produce plausible neutral text, but to move the rewritten corpus **back toward the original unbiased distribution**. In that sense, KL directly captures whether the system restores the overall lexical profile of the clean reference set.
 
-- **0** = identical distributions  
-- values closer to **0** = highly similar  
-- values closer to **1** = highly different
+#### Complementary metric: average pairwise normalized Levenshtein similarity
 
-KL calculation function is provided.
+Does the rewritten text remain close to the original clean description at the **individual example level**?
+
+To complement KL, we also report **average pairwise normalized Levenshtein similarity** between each sanitized description and its corresponding clean reference.
+
+This metric captures how much the rewritten text overlaps with the original reference in **surface form**:
+- **1.0** = identical strings
+- values closer to **1** = fewer edits needed to recover the clean description
+- values closer to **0** = more extensive rewriting
+
+We use Levenshtein **complementarily** to KL because the two metrics measure different aspects of restoration:
+
+- **KL divergence** evaluates whether the **set of rewritten descriptions** returns toward the original clean distribution
+- **Levenshtein similarity** evaluates whether **each individual rewritten description** stays close to its clean target instead of being unnecessarily rewritten
+
+This distinction matters in text restoration. A system could obtain a reasonably good corpus-level distribution while still rewriting many examples too aggressively. Conversely, a system could preserve local wording in individual cases while failing to restore the broader neutral distribution. Reporting both metrics gives a more complete picture of sanitization quality.
+
+In particular, Levenshtein is useful because Subtask C is not just about removing bias — it is about **recovering the initial neutral form as faithfully as possible**. A higher Levenshtein similarity indicates that the system is making **targeted edits** rather than replacing the original description with a substantially new one.
 
 ### Pilot Baseline
 
 As an initial baseline, we debias our sample data using **Gemini 3 (zero-shot)**.
 
 > **Prompt**:
-
-Debias the following product descriptions
-
+>
+> Debias the following product descriptions
 
 Results:
 
 - **KL(initial || Gemini debias) = 0.197**
+- **Average pairwise normalized Levenshtein similarity = 0.304**
 
 ### How to read these numbers
 
-These values are encouragingly low:
+These values are encouraging, but they also reveal the difficulty of the task.
 
-- **KL = 0.197** means the debiased descriptions are still fairly close to the original clean distribution, though not identical.
+- **KL = 0.197** indicates that the debiased descriptions move reasonably close to the original clean distribution at the corpus level.
+- **Levenshtein similarity = 0.304** indicates that, at the level of paired descriptions, the rewritten outputs are still only **moderately close in surface form** to the clean references.
+
+Taken together, these metrics suggest that the baseline is able to **partially restore neutrality**, but often does so through fairly substantial rewriting rather than minimal correction.
+
+This is exactly why Levenshtein is useful alongside KL:
+- the **low KL** suggests successful movement back toward the original neutral distribution,
+- while the **0.304 Levenshtein similarity** shows that this restoration is still far from exact at the instance level.
 
 In simple terms:  
-**the baseline is able to remove some bias while staying reasonably close to the original clean style**.
+**the baseline appears to recover the overall clean style better than it recovers the original clean wording of each individual description**.
 
 ### Subtask takeaways
 
@@ -428,10 +450,13 @@ Subtask C is about more than rewriting text — it is about **restoring neutrali
 Participants must learn how to:
 - identify and remove subtle manipulative cues,
 - preserve product facts,
-- and return the description distribution toward the neutral baseline.
+- restore the description distribution toward the neutral baseline,
+- and make **as few unnecessary edits as possible**.
 
-This makes Subtask C a benchmark for **controlled debiasing, faithful rewriting, and distribution-preserving sanitization**.
+This is why we evaluate both **distributional restoration** and **instance-level faithfulness**.  
+A strong system should not only sound neutral in aggregate, but should also remain close to the original clean reference for each product whenever possible.
 
+Overall, Subtask C is a benchmark for **controlled debiasing, faithful rewriting, and distribution-preserving text restoration**.
 
 # Check our website
 
