@@ -6,12 +6,12 @@
   <title>BiasBeware | Subtask A</title>
   <meta
     name="description"
-    content="BiasBeware Subtask A: Counterfactual attribution of ranking changes caused by cognitive-bias attacks."
+    content="BiasBeware Subtask A: causal attribution of recommendation outcomes under cognitive-bias attacks."
   />
   <meta property="og:title" content="BiasBeware | Subtask A" />
   <meta
     property="og:description"
-    content="Can a system identify which product description caused a recommendation shift?"
+    content="Can a system identify which biased product is causally connected to a recommendation outcome?"
   />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="A.png" />
@@ -20,7 +20,6 @@
   <style>
     :root {
       --bg: #07111f;
-      --bg-soft: rgba(255, 255, 255, 0.05);
       --card: rgba(255, 255, 255, 0.06);
       --border: rgba(255, 255, 255, 0.12);
       --text: #e9eefb;
@@ -32,13 +31,8 @@
       --max: 1180px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -51,15 +45,8 @@
       line-height: 1.65;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
     .container {
       width: min(var(--max), calc(100% - 2rem));
@@ -116,7 +103,6 @@
       color: var(--muted);
       font-weight: 600;
       font-size: 0.95rem;
-      transition: color 0.2s ease;
     }
 
     .nav-links a:hover,
@@ -133,13 +119,9 @@
       box-shadow: 0 14px 30px rgba(138, 180, 255, 0.25);
     }
 
-    section {
-      padding: 2.5rem 0 1rem;
-    }
+    section { padding: 2.5rem 0 1rem; }
 
-    .hero {
-      padding: 4rem 0 2rem;
-    }
+    .hero { padding: 4rem 0 2rem; }
 
     .hero-grid {
       display: grid;
@@ -209,9 +191,7 @@
       margin: 0.75rem 0 0;
     }
 
-    .card {
-      padding: 1.35rem;
-    }
+    .card { padding: 1.35rem; }
 
     .card h3 {
       margin-top: 0;
@@ -237,7 +217,7 @@
 
     .metric-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-top: 1rem;
     }
@@ -268,6 +248,23 @@
       color: var(--muted);
     }
 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(255,255,255,0.05);
+    }
+
     .footer {
       padding: 3rem 0 4rem;
       color: var(--muted);
@@ -283,7 +280,8 @@
 
     @media (max-width: 980px) {
       .hero-grid,
-      .grid-2 {
+      .grid-2,
+      .metric-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -294,16 +292,17 @@
         align-items: flex-start;
       }
 
-      .metric-grid {
-        grid-template-columns: 1fr;
-      }
-
       .hero {
         padding-top: 3rem;
       }
 
       h1 {
         font-size: 2.4rem;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
       }
     }
   </style>
@@ -335,19 +334,19 @@
         <div class="hero-grid">
           <div>
             <div class="eyebrow">BiasBeware · Subtask A</div>
-            <h1>Counterfactual Attribution</h1>
+            <h1>Causal Attribution of Recommendation Outcomes</h1>
             <p class="lead">
-              Can a system identify which product description is causally responsible for an
-              observed recommendation shift? Subtask A focuses on attribution: given competing
-              descriptions and a change in ranking direction, participants must determine which
-              description triggered the effect.
+              Can a system identify which biased product is causally connected to a recommendation
+              outcome? Subtask A asks participants to reason about downstream effects and decide
+              whether Description A, Description B, or neither can best explain the observed shift.
             </p>
           </div>
 
           <div class="image-card">
-            <img src="A.png" alt="Illustration for Subtask A counterfactual attribution" />
+            <img src="A.png" alt="Illustration for Subtask A causal attribution" />
             <div class="caption">
-              Subtask A asks which description caused the ranking change.
+              Subtask A evaluates whether a model can recover the manipulated input most responsible
+              for the downstream recommendation effect.
             </div>
           </div>
         </div>
@@ -358,11 +357,12 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Goal</div>
-          <h2>Identify the source of the ranking change</h2>
+          <h2>Identify the manipulated description behind the outcome</h2>
           <p>
-            Participants receive two potentially attacked candidate descriptions together with the
-            observed direction of a ranking change. The task is to determine which description is
-            causally responsible for the outcome, or whether attribution is uncertain.
+            Participants are given pairs of attacked product descriptions, denoted
+            <strong>Description A</strong> and <strong>Description B</strong>. The task is to
+            determine whether the observed recommendation effect is better attributed to
+            <strong>A</strong>, <strong>B</strong>, or <strong>Uncertain</strong>.
           </p>
         </div>
 
@@ -370,19 +370,88 @@
           <div class="card">
             <h3>Prediction space</h3>
             <ul>
-              <li><strong>A</strong> — description A caused the ranking effect</li>
-              <li><strong>B</strong> — description B caused the ranking effect</li>
-              <li><strong>Uncertain</strong> — both or neither contain a clearly attributable signal</li>
+              <li><strong>A</strong> — description A is the better causal explanation</li>
+              <li><strong>B</strong> — description B is the better causal explanation</li>
+              <li><strong>Uncertain</strong> — the effect cannot be confidently attributed to one side</li>
             </ul>
           </div>
 
           <div class="card">
-            <h3>Why this is challenging</h3>
+            <h3>Why it is difficult</h3>
             <p>
-              Attribution is non-trivial because inserted bias intensity varies from subtle to
-              strong, and different bias categories may interact or have heterogeneous effects on
-              recommendation behavior. The task therefore tests more than surface detection: it
-              requires causal semantic reasoning about how wording changes outcomes.
+              This is not a bias-detection task. Systems must reason about which manipulated input
+              is most likely connected to the downstream recommendation change, making the problem
+              substantially harder than simply recognizing persuasive language.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Pilot construction</div>
+          <h2>How the pilot data is built</h2>
+          <p>
+            The pilot begins from a clean control ranking and several attack-specific recommendation
+            settings. Using ChatGPT 5.4 as the recommender, attacked products are compared against
+            their positions in the control ranking and assigned one movement label:
+            <strong>Up</strong>, <strong>Down</strong>, or <strong>Same</strong>.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Per attacked product</h3>
+            <ul>
+              <li>attacked product description</li>
+              <li>cognitive bias type</li>
+              <li>movement label: <code>Up</code>, <code>Down</code>, or <code>Same</code></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Final pilot instance</h3>
+            <ul>
+              <li><code>description_A</code></li>
+              <li><code>description_B</code></li>
+              <li><code>final_label</code></li>
+            </ul>
+            <p>
+              If the movement labels differ, one side is randomly selected as the gold causal
+              source. If the movement labels are the same, the gold label is
+              <strong>Uncertain</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Pilot setup</div>
+          <h2>100 paired examples</h2>
+          <p>
+            For the pilot study, we sampled <strong>100 paired examples</strong>.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Model roles</h3>
+            <ul>
+              <li><strong>ChatGPT 5.4</strong> — recommender</li>
+              <li><strong>Gemini 3</strong> — causal-attribution model</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Expected output</h3>
+            <p>
+              Gemini 3 receives a pair of attacked descriptions and must output exactly one label:
+              <code>A</code>, <code>B</code>, or <code>Uncertain</code>.
             </p>
           </div>
         </div>
@@ -393,35 +462,37 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Evaluation</div>
-          <h2>Three-label causal classification</h2>
+          <h2>Multi-class causal classification</h2>
           <p>
-            Subtask A is evaluated as a three-label classification problem reflecting the causal
-            link between candidate descriptions and observed ranking changes.
+            Predictions are evaluated against the gold labels using standard multi-class
+            classification metrics.
           </p>
         </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <h3>Primary metric</h3>
-            <div class="metric-grid">
-              <div class="metric">
-                <div class="metric-name">Macro-F1</div>
-                <div class="metric-value">F1</div>
-                <small>
-                  Macro-F1 rewards balanced performance across all three labels and ensures that
-                  systems do not ignore the harder uncertain cases.
-                </small>
-              </div>
-            </div>
-          </div>
+        <div class="card">
+          <h3>Metrics</h3>
+          <ul>
+            <li><strong>Primary metric:</strong> Macro-F1</li>
+            <li><strong>Additional metrics:</strong> Accuracy, Balanced Accuracy, Per-class Precision / Recall / F1, Confusion Matrix</li>
+            <li><strong>Also reported:</strong> one-vs-rest ROC/AUC values for completeness</li>
+          </ul>
+        </div>
 
-          <div class="card">
-            <h3>Evaluation principle</h3>
-            <p>
-              Strong systems should not simply detect whether a description sounds persuasive.
-              They must identify whether that description is actually responsible for the observed
-              ranking movement under the given recommendation setting.
-            </p>
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-name">Macro-F1</div>
+            <div class="metric-value">0.153</div>
+            <small>Primary metric on the 100-example pilot set.</small>
+          </div>
+          <div class="metric">
+            <div class="metric-name">Accuracy</div>
+            <div class="metric-value">0.160</div>
+            <small>Overall exact-match classification accuracy.</small>
+          </div>
+          <div class="metric">
+            <div class="metric-name">Balanced Accuracy</div>
+            <div class="metric-value">0.203</div>
+            <small>Accounts for uneven class behavior across labels.</small>
           </div>
         </div>
       </div>
@@ -430,33 +501,116 @@
     <section>
       <div class="container">
         <div class="section-head">
+          <div class="eyebrow">Pilot results</div>
+          <h2>Per-class performance</h2>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Class A</h3>
+            <ul>
+              <li>Precision: <strong>0.167</strong></li>
+              <li>Recall: <strong>0.316</strong></li>
+              <li>F1: <strong>0.218</strong></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Class B</h3>
+            <ul>
+              <li>Precision: <strong>0.167</strong></li>
+              <li>Recall: <strong>0.273</strong></li>
+              <li>F1: <strong>0.207</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 1rem;">
+          <h3>Class Uncertain</h3>
+          <ul>
+            <li>Precision: <strong>0.100</strong></li>
+            <li>Recall: <strong>0.021</strong></li>
+            <li>F1: <strong>0.034</strong></li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top: 1rem;">
+          <h3>Confusion matrix</h3>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>pred_A</th>
+                <th>pred_B</th>
+                <th>pred_Uncertain</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>true_A</th>
+                <td>6</td>
+                <td>13</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <th>true_B</th>
+                <td>15</td>
+                <td>9</td>
+                <td>9</td>
+              </tr>
+              <tr>
+                <th>true_Uncertain</th>
+                <td>15</td>
+                <td>32</td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" style="margin-top: 1rem;">
+          <h3>One-vs-rest ROC AUC</h3>
+          <ul>
+            <li><strong>A:</strong> 0.473</li>
+            <li><strong>B:</strong> 0.301</li>
+            <li><strong>Uncertain:</strong> 0.424</li>
+            <li><strong>Macro OVR AUC:</strong> 0.399</li>
+            <li><strong>Weighted OVR AUC:</strong> 0.392</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
           <div class="eyebrow">Interpretation</div>
-          <h2>What success looks like</h2>
+          <h2>Why these results matter</h2>
           <p>
-            A strong Subtask A model should separate mere bias presence from causal responsibility.
-            It should correctly attribute rank changes even when interventions are subtle, mixed,
-            or ambiguous, making this subtask a benchmark for explanation-grounded reasoning in
-            LLM-based recommendation.
+            The pilot shows that <strong>causal attribution is substantially harder than bias
+            identification</strong>. Humans can easily recognize explicit bias cues, but deciding
+            which manipulated product is responsible for a downstream ranking effect is a much more
+            demanding reasoning problem.
           </p>
         </div>
 
         <div class="grid-2">
           <div class="card">
-            <h3>Good attribution behavior</h3>
+            <h3>Key observations</h3>
             <ul>
-              <li>Correctly identifies the responsible description when the signal is clear</li>
-              <li>Handles subtle and medium-strength attacks robustly</li>
-              <li>Uses the <strong>Uncertain</strong> label appropriately in ambiguous cases</li>
-              <li>Reasons about outcome causality, not just persuasive wording in isolation</li>
+              <li>Gemini 3 performs well below a strong reliability threshold</li>
+              <li>It does somewhat better on <strong>A</strong> and <strong>B</strong> than on <strong>Uncertain</strong></li>
+              <li>The model tends to over-commit instead of abstaining in ambiguous cases</li>
+              <li>Classwise analysis is essential; overall accuracy alone is misleading</li>
             </ul>
           </div>
 
           <div class="card">
-            <h3>Future results</h3>
+            <h3>Pilot takeaway</h3>
             <p>
-              Baseline and leaderboard results will appear here once the benchmark evaluation is
-              finalized. For now, this page documents the task objective and official scoring
-              setup for participants.
+              The pilot confirms that Subtask A is non-trivial and meaningful. It is not solved by
+              superficial pattern matching and supports BiasBeware as a benchmark for
+              <strong>causal reasoning under biased language conditions</strong>.
             </p>
           </div>
         </div>
@@ -468,8 +622,8 @@
         <div class="footer-card">
           <h3 style="margin-top: 0;">Back to BiasBeware</h3>
           <p>
-            Return to the main page for the full dataset overview, annotation pipeline, taxonomy,
-            and paper reference.
+            Return to the main page for the dataset overview, annotation pipeline, taxonomy, and
+            paper reference.
           </p>
           <p style="margin-bottom: 0;">
             <a href="index.html" style="font-weight: 800; color: var(--text);">Open main page →</a>
