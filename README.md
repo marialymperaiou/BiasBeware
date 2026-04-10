@@ -392,22 +392,12 @@ where:
 - Lower values mean the sanitized descriptions are lexically closer to the clean reference
 - Higher values mean more drift from the original neutral style
 
-#### Secondary metric: Jensen–Shannon divergence (JSD)
-
-As a bounded, symmetric companion metric, we also report:
-
-JSD(initial, sanitized)
-
-with
-
-0 ≤ JSD(initial, sanitized) ≤ 1
-
 
 - **0** = identical distributions  
 - values closer to **0** = highly similar  
 - values closer to **1** = highly different
 
-Both KL and JSD calculation functions are provided.
+KL calculation function is provided.
 
 ### Pilot Baseline
 
@@ -421,14 +411,12 @@ Debias the following product descriptions
 Results:
 
 - **KL(initial || Gemini debias) = 0.197**
-- **JSD(initial, Gemini debias) = 0.059**
 
 ### How to read these numbers
 
 These values are encouragingly low:
 
 - **KL = 0.197** means the debiased descriptions are still fairly close to the original clean distribution, though not identical.
-- **JSD = 0.059** means the overall lexical distributions are very similar. Since JSD ranges from **0** to **1**, a value of **0.059** indicates only a small amount of distributional drift.
 
 In simple terms:  
 **the baseline is able to remove some bias while staying reasonably close to the original clean style**.
