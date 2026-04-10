@@ -440,7 +440,8 @@
           <div class="card">
             <h3>Primary metric: KL divergence</h3>
             <p>
-              Does the rewritten text move back toward the original neutral description distribution?
+              Does the rewritten (debiased) text move back toward the original neutral description distribution? 
+              In other words, how much can we <strong>trust</strong> that debiasing has been achieved?
             </p>
 
             <div class="metric-grid">
@@ -463,10 +464,10 @@
           </div>
 
           <div class="card">
-            <h3>Complementary metric: pairwise normalized Levenshtein similarity</h3>
+            <h3>Additional: pairwise normalized Levenshtein similarity</h3>
             <p>
-              Does the rewritten text remain close to the original clean description at the
-              <strong>individual example level</strong>?
+              Does the rewritten text remain close to the original description at the
+              <strong>individual example level</strong>? 
             </p>
 
             <div class="metric-grid">
@@ -534,7 +535,7 @@
                 <small>The debiased descriptions move reasonably close to the original clean distribution.</small>
               </div>
               <div class="metric">
-                <div class="metric-name">Avg. normalized Levenshtein similarity</div>
+                <div class="metric-name">LevSim</div>
                 <div class="metric-value">0.304</div>
                 <small>The rewritten outputs remain only moderately close in surface form to the clean references.</small>
               </div>
