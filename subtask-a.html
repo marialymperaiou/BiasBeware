@@ -17,6 +17,16 @@
   <meta property="og:image" content="A.png" />
   <meta name="theme-color" content="#0b1020" />
 
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
   <style>
     :root {
       --bg: #07111f;
@@ -120,7 +130,6 @@
     }
 
     section { padding: 2.5rem 0 1rem; }
-
     .hero { padding: 4rem 0 2rem; }
 
     .hero-grid {
@@ -140,7 +149,7 @@
     }
 
     h1 {
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
       line-height: 1;
       margin: 0 0 1rem;
       letter-spacing: -0.04em;
@@ -191,7 +200,9 @@
       margin: 0.75rem 0 0;
     }
 
-    .card { padding: 1.35rem; }
+    .card {
+      padding: 1.35rem;
+    }
 
     .card h3 {
       margin-top: 0;
@@ -248,6 +259,28 @@
       color: var(--muted);
     }
 
+    .term {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -297,7 +330,7 @@
       }
 
       h1 {
-        font-size: 2.4rem;
+        font-size: 2.3rem;
       }
 
       table {
@@ -334,7 +367,7 @@
         <div class="hero-grid">
           <div>
             <div class="eyebrow">BiasBeware · Subtask A</div>
-            <h1>Causal Attribution of Recommendation Outcomes</h1>
+            <h1>Causal Attribution</h1>
             <p class="lead">
               Can a system identify which biased product is causally connected to a recommendation
               outcome? Subtask A asks participants to reason about downstream effects and decide
@@ -358,26 +391,26 @@
         <div class="section-head">
           <div class="eyebrow">Goal</div>
           <h2>Identify the manipulated description behind the outcome</h2>
-<p>
-  Participants are given pairs of attacked product descriptions, denoted
-  <strong>Description A</strong> and <strong>Description B</strong>. The task is to
-  determine whether the observed recommendation effect is better attributed to
-  <strong>A</strong>, <strong>B</strong>, or <strong>Uncertain</strong>. In this setting,
-  the recommendation effect refers to the change in a product’s ranking position
-  before and after the attack. Each attacked product is therefore associated with one
-  of three movement labels: <strong>Up</strong>, <strong>Down</strong>, or
-  <strong>Same</strong>, indicating whether the product moved higher, lower, or remained
-  at the same position after the cognitive-bias manipulation.
-</p>
+          <p>
+            Participants are given pairs of attacked product descriptions, denoted
+            <span class="term">Description A</span> and <span class="term">Description B</span>.
+            The task is to determine whether the observed recommendation effect is better attributed to
+            <span class="term">A</span>, <span class="term">B</span>, or <span class="term">Uncertain</span>.
+            In this setting, the recommendation effect refers to the change in a product’s ranking position
+            before and after the attack. Each attacked product is therefore associated with one
+            of three movement labels: <span class="term">Up</span>, <span class="term">Down</span>, or
+            <span class="term">Same</span>, indicating whether the product moved higher, lower, or remained
+            at the same position after the cognitive-bias manipulation.
+          </p>
         </div>
 
         <div class="grid-2">
           <div class="card">
             <h3>Prediction space</h3>
             <ul>
-              <li><strong>A</strong> — description A is the better causal explanation</li>
-              <li><strong>B</strong> — description B is the better causal explanation</li>
-              <li><strong>Uncertain</strong> — the effect cannot be confidently attributed to one side</li>
+              <li><span class="term">A</span> — description A is the better causal explanation</li>
+              <li><span class="term">B</span> — description B is the better causal explanation</li>
+              <li><span class="term">Uncertain</span> — the effect cannot be confidently attributed to one side</li>
             </ul>
           </div>
 
@@ -402,7 +435,7 @@
             The pilot begins from a clean control ranking and several attack-specific recommendation
             settings. Using ChatGPT 5.4 as the recommender, attacked products are compared against
             their positions in the control ranking and assigned one movement label:
-            <strong>Up</strong>, <strong>Down</strong>, or <strong>Same</strong>.
+            <span class="term">Up</span>, <span class="term">Down</span>, or <span class="term">Same</span>.
           </p>
         </div>
 
@@ -412,21 +445,21 @@
             <ul>
               <li>attacked product description</li>
               <li>cognitive bias type</li>
-              <li>movement label: <code>Up</code>, <code>Down</code>, or <code>Same</code></li>
+              <li>movement label: Up, Down, or Same</li>
             </ul>
           </div>
 
           <div class="card">
             <h3>Final pilot instance</h3>
-            <ul>
-              <li><code>description_A</code></li>
-              <li><code>description_B</code></li>
-              <li><code>final_label</code></li>
-            </ul>
+            <div class="pill-list">
+              <span class="pill">description_A</span>
+              <span class="pill">description_B</span>
+              <span class="pill">final_label</span>
+            </div>
             <p>
               If the movement labels differ, one side is randomly selected as the gold causal
               source. If the movement labels are the same, the gold label is
-              <strong>Uncertain</strong>.
+              <span class="term">Uncertain</span>.
             </p>
           </div>
         </div>
@@ -456,7 +489,7 @@
             <h3>Expected output</h3>
             <p>
               Gemini 3 receives a pair of attacked descriptions and must output exactly one label:
-              <code>A</code>, <code>B</code>, or <code>Uncertain</code>.
+              <span class="term">A</span>, <span class="term">B</span>, or <span class="term">Uncertain</span>.
             </p>
           </div>
         </div>
