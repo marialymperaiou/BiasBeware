@@ -18,14 +18,14 @@
   <meta name="theme-color" content="#0b1020" />
 
   <script>
-  window.MathJax = {
-    tex: {
-      inlineMath: [['\\(', '\\)'], ['$', '$']],
-      displayMath: [['\\[', '\\]'], ['$$', '$$']]
-    }
-  };
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <style>
     :root {
@@ -435,50 +435,28 @@
           </p>
         </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <h3>Primary metric: KL divergence</h3>
-            <p>
-              Does the rewritten text move back toward the original neutral description distribution?
-            </p>
+        <div class="card">
+          <h3>Primary metric: KL divergence</h3>
+          <p>
+            Does the rewritten text move back toward the original neutral description distribution?
+          </p>
 
-            <div class="metric-grid">
-              <div class="metric">
-                <div class="metric-name">KL(initial || sanitized)</div>
-                <div class="metric-value">KL</div>
-                <small>Lower values mean the sanitized set is lexically closer to the clean reference.</small>
-              </div>
-            </div>
-
-            <p><strong>Interpretation:</strong> <span>\(D_{\mathrm{KL}} = 0\)</span> means the two distributions are identical.</p>
-          </div>
-
-          <div class="card">
-            <h3>Secondary metric: JSD</h3>
-            <p>
-              As a bounded, symmetric companion metric, we also report Jensen–Shannon divergence.
-            </p>
-
-            <div class="metric-grid">
-              <div class="metric">
-                <div class="metric-name">JSD(initial, sanitized)</div>
-                <div class="metric-value">JSD</div>
-                <small>Values closer to 0 indicate higher similarity between the sanitized and clean distributions.</small>
-              </div>
-              <div class="metric">
-                <div class="metric-name">Range</div>
-                <div class="metric-value">0–1</div>
-                <small>0 means identical distributions; values closer to 1 indicate greater drift.</small>
-              </div>
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="metric-name">KL(initial || sanitized)</div>
+              <div class="metric-value">KL</div>
+              <small>Lower values mean the sanitized set is lexically closer to the clean reference.</small>
             </div>
           </div>
+
+          <p><strong>Interpretation:</strong> <span>\(D_{\mathrm{KL}} = 0\)</span> means the two distributions are identical.</p>
         </div>
 
         <div class="card" style="margin-top: 1rem;">
           <h3>What we provide</h3>
           <p>
-            Both <strong>KL</strong> and <strong>JSD</strong> calculation functions are provided
-            to participants for direct evaluation of their rewritten descriptions.
+            A <strong>KL</strong> calculation function is provided to participants for direct
+            evaluation of their rewritten descriptions.
           </p>
         </div>
       </div>
@@ -514,11 +492,6 @@
                 <div class="metric-value">0.197</div>
                 <small>The debiased descriptions remain fairly close to the original clean distribution.</small>
               </div>
-              <div class="metric">
-                <div class="metric-name">JSD(initial, Gemini debias)</div>
-                <div class="metric-value">0.059</div>
-                <small>This indicates only a small amount of distributional drift.</small>
-              </div>
             </div>
           </div>
         </div>
@@ -526,20 +499,21 @@
         <div class="card" style="margin-top: 1rem;">
           <h3>Pilot setup</h3>
           <p>
-            200 biased descriptions vs their unbiased counterparts. 
+            200 biased descriptions vs their unbiased counterparts.
             All biases stem from <strong>intense intervention</strong> (i.e. level 3), thus being easily detectable.
             As confirmed by the human annotations, people can recognize these biases with 100% accuracy.
           </p>
-          <h3>How to read these numbers</h3>
+
+          <h3>How to read this number</h3>
           <p>
-            These values are encouragingly low. <strong>KL = 0.197</strong> means the debiased
+            The pilot value is encouragingly low. <strong>KL = 0.197</strong> means the debiased
             descriptions are still fairly close to the original clean distribution, though not
-            identical. <strong>JSD = 0.059</strong> means the overall lexical distributions are
-            very similar. 
+            identical.
           </p>
           <p>
             In simple terms, the baseline is able to remove some bias while staying reasonably
-            close to the original clean style. Are these baseline metrics going to stay promising under more diverse and complex attacks to come? Stay tuned!
+            close to the original clean style. Are these baseline metrics going to stay promising
+            under more diverse and complex attacks to come? Stay tuned!
           </p>
         </div>
       </div>
