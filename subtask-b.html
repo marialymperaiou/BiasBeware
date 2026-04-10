@@ -6,12 +6,12 @@
   <title>BiasBeware | Subtask B</title>
   <meta
     name="description"
-    content="BiasBeware Subtask B: Defense against cognitive-bias attacks in LLM-driven recommendation."
+    content="BiasBeware Subtask B: defense against cognitive-bias attacks in LLM-driven recommendation."
   />
   <meta property="og:title" content="BiasBeware | Subtask B" />
   <meta
     property="og:description"
-    content="Can a system maintain fair recommendations under biased product descriptions?"
+    content="Can a system maintain fair recommendations under manipulated descriptions?"
   />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="B.png" />
@@ -20,7 +20,6 @@
   <style>
     :root {
       --bg: #07111f;
-      --bg-soft: rgba(255, 255, 255, 0.05);
       --card: rgba(255, 255, 255, 0.06);
       --border: rgba(255, 255, 255, 0.12);
       --text: #e9eefb;
@@ -32,13 +31,8 @@
       --max: 1180px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -51,15 +45,8 @@
       line-height: 1.65;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
     .container {
       width: min(var(--max), calc(100% - 2rem));
@@ -116,7 +103,6 @@
       color: var(--muted);
       font-weight: 600;
       font-size: 0.95rem;
-      transition: color 0.2s ease;
     }
 
     .nav-links a:hover,
@@ -133,13 +119,8 @@
       box-shadow: 0 14px 30px rgba(138, 180, 255, 0.25);
     }
 
-    section {
-      padding: 2.5rem 0 1rem;
-    }
-
-    .hero {
-      padding: 4rem 0 2rem;
-    }
+    section { padding: 2.5rem 0 1rem; }
+    .hero { padding: 4rem 0 2rem; }
 
     .hero-grid {
       display: grid;
@@ -283,7 +264,8 @@
 
     @media (max-width: 980px) {
       .hero-grid,
-      .grid-2 {
+      .grid-2,
+      .metric-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -292,10 +274,6 @@
       .nav-inner {
         flex-direction: column;
         align-items: flex-start;
-      }
-
-      .metric-grid {
-        grid-template-columns: 1fr;
       }
 
       .hero {
@@ -316,16 +294,16 @@
         <div>BiasBeware</div>
       </a>
 
-<nav class="nav-links">
-  <a href="index.html#overview">Overview</a>
-  <a href="index.html#pipeline">Pipeline</a>
-  <a href="index.html#taxonomy">Taxonomy</a>
-  <a href="subtask-a.html">Subtask A</a>
-  <a href="subtask-b.html" class="active">Subtask B</a>
-  <a href="subtask-c.html">Subtask C</a>
-  <a href="index.html#paper">Paper</a>
-  <a class="nav-cta" href="https://github.com/marialymperaiou/BiasBeware" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
-</nav>
+      <nav class="nav-links">
+        <a href="index.html#overview">Overview</a>
+        <a href="index.html#pipeline">Pipeline</a>
+        <a href="index.html#taxonomy">Taxonomy</a>
+        <a href="subtask-a.html">Subtask A</a>
+        <a href="subtask-b.html" class="active">Subtask B</a>
+        <a href="subtask-c.html">Subtask C</a>
+        <a href="index.html#paper">Paper</a>
+        <a class="nav-cta" href="https://github.com/marialymperaiou/BiasBeware" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
+      </nav>
     </div>
   </header>
 
@@ -337,10 +315,9 @@
             <div class="eyebrow">BiasBeware · Subtask B</div>
             <h1>Defense Against Attack</h1>
             <p class="lead">
-              Can a system maintain fair recommendations even when product descriptions are
-              deliberately manipulated with persuasive cognitive-bias cues? Subtask B evaluates
-              robustness under attack and asks participants to restore rankings as closely as
-              possible to the unbiased recommendation baseline.
+              Can a system maintain fair recommendations under manipulated descriptions? Subtask B
+              evaluates whether recommendation behavior remains robust when one or more product
+              descriptions are attacked with cognitive-bias cues.
             </p>
           </div>
 
@@ -358,22 +335,22 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Goal</div>
-          <h2>Defend recommendation quality under biased inputs</h2>
+          <h2>Maintain fair recommendations under manipulated descriptions</h2>
           <p>
-            Participants are given a recommendation setting with competing products where one or
-            more descriptions may have been attacked using cognitive-bias cues. The original
-            pre-attack ranking is provided, and the objective is to reduce unfair rank shifts
-            caused by manipulated language.
+            Participants are given recommendation settings with competing products where one or more
+            descriptions may have been attacked using cognitive-bias cues. The original pre-attack
+            ranking is provided, and the objective is to reduce unfair rank shifts caused by
+            manipulated language.
           </p>
         </div>
 
         <div class="grid-2">
           <div class="card">
-            <h3>What systems should achieve</h3>
+            <h3>What a successful system should do</h3>
             <ul>
               <li>Detect or neutralize the effect of biased product descriptions</li>
               <li>Preserve the integrity of the original recommendation ordering</li>
-              <li>Remain robust across different recommendation settings and attack styles</li>
+              <li>Remain robust across recommendation settings and attack styles</li>
               <li>Generalize beyond a single exposed recommender or prompt setup</li>
             </ul>
           </div>
@@ -381,10 +358,9 @@
           <div class="card">
             <h3>Why this matters</h3>
             <p>
-              In realistic recommendation systems, manipulative wording can unfairly boost or
-              suppress products without changing their actual technical value. Subtask B asks
-              whether models can resist such attacks and maintain fair, stable, and trustworthy
-              recommendations.
+              Cognitive-bias attacks can unfairly boost or suppress products without changing their
+              actual content. Subtask B measures whether a system can resist these distortions and
+              protect fair recommendation behavior.
             </p>
           </div>
         </div>
@@ -395,37 +371,30 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Evaluation</div>
-          <h2>Measure robustness through rank restoration</h2>
+          <h2>Rank restoration under attack</h2>
           <p>
-            Rather than optimizing for one specific model or prompt, Subtask B is designed to
-            reward model-agnostic defenses that restore the original ranking as closely as possible
-            after an attack.
+            We evaluate defense through average rank displacement:
           </p>
         </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <h3>Primary metric</h3>
-            <div class="metric-grid">
-              <div class="metric">
-                <div class="metric-name">Mean absolute rank displacement</div>
-                <div class="metric-value">avg|Δ|</div>
-                <small>
-                  Lower is better. Smaller values indicate that the defended system keeps the
-                  post-attack ranking closer to the original unbiased ordering.
-                </small>
-              </div>
+        <div class="card">
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="metric-name">Primary metric</div>
+              <div class="metric-value">avg|Δ|</div>
+              <small>Lower is better. Smaller values indicate rankings closer to the unbiased ordering.</small>
             </div>
           </div>
 
-          <div class="card">
-            <h3>Evaluation principle</h3>
-            <p>
-              Systems are evaluated by how well they reduce unfair rank shifts across multiple
-              recommendation scenarios. This encourages generalizable defenses rather than methods
-              that overfit to one exposed recommender or a narrow class of attacks.
-            </p>
-          </div>
+          <h3 style="margin-top: 1.2rem;">Auxiliary pilot analysis</h3>
+          <ul>
+            <li><strong>appearance-rate delta</strong>, measured in percentage points (pp)</li>
+            <li><strong>average-position delta</strong>, measured in ranking positions</li>
+          </ul>
+          <p>
+            For average-position delta, <strong>negative</strong> values indicate movement toward the
+            top of the ranking, while <strong>positive</strong> values indicate movement downward.
+          </p>
         </div>
       </div>
     </section>
@@ -433,32 +402,68 @@
     <section>
       <div class="container">
         <div class="section-head">
-          <div class="eyebrow">Interpretation</div>
-          <h2>What success looks like</h2>
+          <div class="eyebrow">Pilot observations</div>
+          <h2>Different attack families distort rankings differently</h2>
           <p>
-            A strong Subtask B system should make recommendation outcomes less sensitive to
-            manipulative wording while preserving meaningful ranking signals based on the actual
-            product content. The ultimate goal is fairer and more reliable recommendation behavior.
+            Preliminary experiments with <strong>Qwen3-0.6B</strong> show that cognitive-bias attacks
+            do not create a single uniform distortion pattern. Each attack family perturbs
+            recommendation behavior differently.
           </p>
         </div>
 
         <div class="grid-2">
           <div class="card">
-            <h3>Good defense behavior</h3>
-            <ul>
-              <li>Biased descriptions do not cause large rank jumps</li>
-              <li>Original product ordering is approximately preserved</li>
-              <li>Robustness holds across multiple bias categories</li>
-              <li>Systems do not rely on fragile prompt-specific tricks</li>
-            </ul>
+            <h3>Social Proof</h3>
+            <p>
+              The most volatile intervention. It produces the strongest single
+              <strong>appearance-rate delta</strong> at <strong>+40.00 pp</strong>, but its mean
+              appearance-rate delta is almost neutral at <strong>+0.71 pp</strong> because large
+              gains are offset by drops of up to <strong>-15.00 pp</strong>.
+            </p>
+            <p>
+              Its <strong>average-position delta</strong> is similarly polarized, ranging from
+              ranking improvements of <strong>-1.15</strong> and <strong>-0.81</strong> positions
+              to degradations of <strong>+1.67</strong> and <strong>+1.28</strong>.
+            </p>
           </div>
 
           <div class="card">
-            <h3>Future results</h3>
+            <h3>Exclusivity</h3>
             <p>
-              Baseline and leaderboard results will appear here once evaluation experiments are
-              completed. This page is intentionally structured now to make the task setting and
-              scoring clear even before final numbers are available.
+              Less extreme, but more consistently harmful to ordering. It increases the mean
+              <strong>appearance-rate delta</strong> by <strong>+5.13 pp</strong>, yet its mean
+              <strong>average-position delta</strong> is <strong>+0.31 positions</strong>,
+              suggesting that added visibility does not necessarily translate into better placement.
+            </p>
+            <p>
+              In some cases, it coincides with joint deterioration:
+              <strong>-4.09 pp</strong> in appearance rate and <strong>+0.86 positions</strong> in
+              average position.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 1rem;">
+          <div class="card">
+            <h3>Discount Framing</h3>
+            <p>
+              Comparatively milder and more stable. It produces the largest mean
+              <strong>appearance-rate delta</strong> at <strong>+6.43 pp</strong> and no appearance
+              drops across valid targets.
+            </p>
+            <p>
+              Yet its mean <strong>average-position delta</strong> remains slightly adverse at
+              <strong>+0.11 positions</strong>, showing that a few negative cases offset several
+              small improvements.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Pilot takeaway</h3>
+            <p>
+              Subtask B should reward defenses that are robust not only to obvious visibility
+              inflation, but also to subtler cases where appearance rate and ranking move in
+              different directions.
             </p>
           </div>
         </div>
