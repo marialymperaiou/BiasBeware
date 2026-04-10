@@ -355,6 +355,7 @@ This is encouraging for the benchmark design. It shows that:
 - and future systems should be evaluated on whether they can truly preserve the original ranking structure under biased language attacks.
 
 Overall, the pilot supports Subtask B as a challenging benchmark for **robust recommendation under cognitively manipulated language**.
+
 ---
 
 
