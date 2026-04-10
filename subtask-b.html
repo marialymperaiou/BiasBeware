@@ -249,6 +249,37 @@
       color: var(--muted);
     }
 
+    .code-block {
+      background: #09111d;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .code-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    pre {
+      margin: 0;
+      padding: 1rem 1rem 1.15rem;
+      overflow-x: auto;
+      color: #dbe7ff;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
     .footer {
       padding: 3rem 0 4rem;
       color: var(--muted);
@@ -337,9 +368,10 @@
           <div class="eyebrow">Goal</div>
           <h2>Maintain fair recommendations under manipulated descriptions</h2>
           <p>
-            Participants are given recommendation settings with competing products where one or more
-            descriptions may have been attacked using cognitive-bias cues. The original pre-attack
-            ranking is provided, and the objective is to reduce unfair rank shifts caused by
+            In Subtask B, participants are given recommendation settings with competing products
+            where one or more descriptions may have been attacked using cognitive-bias cues.
+            The recommender to be used is <strong>Qwen3-0.6B</strong>, and the original pre-attack
+            ranking is provided. The objective is to reduce unfair rank shifts caused by
             manipulated language.
           </p>
         </div>
@@ -351,7 +383,7 @@
               <li>Detect or neutralize the effect of biased product descriptions</li>
               <li>Preserve the integrity of the original recommendation ordering</li>
               <li>Remain robust across recommendation settings and attack styles</li>
-              <li>Generalize beyond a single exposed recommender or prompt setup</li>
+              <li>Generalize beyond a single prompt-specific defense trick</li>
             </ul>
           </div>
 
@@ -359,8 +391,8 @@
             <h3>Why this matters</h3>
             <p>
               Cognitive-bias attacks can unfairly boost or suppress products without changing their
-              actual content. Subtask B measures whether a system can resist these distortions and
-              protect fair recommendation behavior.
+              underlying technical content. Subtask B measures whether a system can resist such
+              distortions and preserve fair recommendation behavior.
             </p>
           </div>
         </div>
@@ -373,7 +405,7 @@
           <div class="eyebrow">Evaluation</div>
           <h2>Rank restoration under attack</h2>
           <p>
-            We evaluate defense through average rank displacement:
+            We evaluate defense through rank restoration using the <strong>sum of squared rank displacement</strong>.
           </p>
         </div>
 
@@ -381,19 +413,32 @@
           <div class="metric-grid">
             <div class="metric">
               <div class="metric-name">Primary metric</div>
-              <div class="metric-value">avg|Δ|</div>
-              <small>Lower is better. Smaller values indicate rankings closer to the unbiased ordering.</small>
+              <div class="metric-value">sum(Δ²)</div>
+              <small>Lower is better. Values closer to 0 indicate rankings closer to the original unbiased ordering.</small>
+            </div>
+            <div class="metric">
+              <div class="metric-name">Interpretation</div>
+              <div class="metric-value">0 → best</div>
+              <small>Larger deviations are penalized more strongly than with simple absolute displacement.</small>
             </div>
           </div>
 
-          <h3 style="margin-top: 1.2rem;">Auxiliary pilot analysis</h3>
+          <div class="code-block">
+            <div class="code-head">
+              <span>Definition</span>
+            </div>
+            <pre><code>\(\sum_{i=1}^{n}\left(r_{\mathrm{before}}(i)-r_{\mathrm{after}}(i)\right)^2\)</code></pre>
+          </div>
+
+          <h3 style="margin-top: 1.2rem;">Additional descriptive metrics</h3>
           <ul>
-            <li><strong>appearance-rate delta</strong>, measured in percentage points (pp)</li>
-            <li><strong>average-position delta</strong>, measured in ranking positions</li>
+            <li><strong>avg|Δ|</strong>: average absolute rank displacement</li>
+            <li><strong>Spearman correlation</strong> between defended and original rankings</li>
+            <li><strong>Kendall tau</strong> correlation</li>
+            <li><strong>Kendall distance</strong></li>
           </ul>
           <p>
-            For average-position delta, <strong>negative</strong> values indicate movement toward the
-            top of the ranking, while <strong>positive</strong> values indicate movement downward.
+            These complementary metrics help distinguish between small local shifts and more global ranking disruption.
           </p>
         </div>
       </div>
@@ -403,67 +448,181 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Pilot observations</div>
-          <h2>Different attack families distort rankings differently</h2>
+          <h2>Simple prompt-based defense is not enough</h2>
           <p>
-            Preliminary experiments with <strong>Qwen3-0.6B</strong> show that cognitive-bias attacks
-            do not create a single uniform distortion pattern. Each attack family perturbs
-            recommendation behavior differently.
+            Preliminary experiments with <strong>Qwen3-0.6B</strong> show that a lightweight
+            prompt-based defense is <strong>not sufficient to reliably preserve the original ranking</strong>
+            under cognitive-bias attacks.
           </p>
         </div>
 
         <div class="grid-2">
           <div class="card">
-            <h3>Social Proof</h3>
-            <p>
-              The most volatile intervention. It produces the strongest single
-              <strong>appearance-rate delta</strong> at <strong>+40.00 pp</strong>, but its mean
-              appearance-rate delta is almost neutral at <strong>+0.71 pp</strong> because large
-              gains are offset by drops of up to <strong>-15.00 pp</strong>.
-            </p>
-            <p>
-              Its <strong>average-position delta</strong> is similarly polarized, ranging from
-              ranking improvements of <strong>-1.15</strong> and <strong>-0.81</strong> positions
-              to degradations of <strong>+1.67</strong> and <strong>+1.28</strong>.
-            </p>
+            <h3>Overall pilot averages</h3>
+            <div class="metric-grid">
+              <div class="metric">
+                <div class="metric-name">avg|Δ|</div>
+                <div class="metric-value">2.5755</div>
+                <small>The average product still moves by about 2.6 ranking positions.</small>
+              </div>
+              <div class="metric">
+                <div class="metric-name">sum(Δ²)</div>
+                <div class="metric-value">68.2583</div>
+                <small>Substantial ranking distortion remains after defense.</small>
+              </div>
+              <div class="metric">
+                <div class="metric-name">Spearman</div>
+                <div class="metric-value">0.0081</div>
+                <small>Very weak global ranking agreement.</small>
+              </div>
+              <div class="metric">
+                <div class="metric-name">Kendall tau</div>
+                <div class="metric-value">0.0081</div>
+                <small>Pairwise order recovery remains near zero.</small>
+              </div>
+            </div>
+
+            <div class="metric-grid" style="margin-top: 1rem;">
+              <div class="metric">
+                <div class="metric-name">Kendall distance</div>
+                <div class="metric-value">0.4959</div>
+                <small>The defended rankings remain far from preserving the original pairwise order.</small>
+              </div>
+            </div>
           </div>
 
           <div class="card">
-            <h3>Exclusivity</h3>
+            <h3>What these numbers mean</h3>
             <p>
-              Less extreme, but more consistently harmful to ordering. It increases the mean
-              <strong>appearance-rate delta</strong> by <strong>+5.13 pp</strong>, yet its mean
-              <strong>average-position delta</strong> is <strong>+0.31 positions</strong>,
-              suggesting that added visibility does not necessarily translate into better placement.
-            </p>
-            <p>
-              In some cases, it coincides with joint deterioration:
-              <strong>-4.09 pp</strong> in appearance rate and <strong>+0.86 positions</strong> in
-              average position.
+              Even after defense, rankings remain substantially distorted. The average product
+              still shifts by about <strong>2.6 positions</strong>, while both Spearman and
+              Kendall tau remain near zero, indicating that the original recommendation structure
+              is only weakly recovered.
             </p>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="grid-2" style="margin-top: 1rem;">
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Across attack families</div>
+          <h2>Some families are slightly easier, but none are well controlled</h2>
+          <p>
+            At the attack-family level, the defense performs similarly poorly overall, though some
+            differences appear in the pilot.
+          </p>
+        </div>
+
+        <div class="grid-2">
           <div class="card">
-            <h3>Discount Framing</h3>
-            <p>
-              Comparatively milder and more stable. It produces the largest mean
-              <strong>appearance-rate delta</strong> at <strong>+6.43 pp</strong> and no appearance
-              drops across valid targets.
-            </p>
-            <p>
-              Yet its mean <strong>average-position delta</strong> remains slightly adverse at
-              <strong>+0.11 positions</strong>, showing that a few negative cases offset several
-              small improvements.
-            </p>
+            <h3>Directory-level results</h3>
+            <ul>
+              <li><strong>Scarcity</strong> — hardest by the primary metric:
+                <strong>sum(Δ²) = 69.5125</strong></li>
+              <li><strong>Discount framing</strong> — slightly less disruptive:
+                <strong>sum(Δ²) = 67.5062</strong></li>
+              <li><strong>Exclusivity</strong> — very close in aggregate:
+                <strong>sum(Δ²) = 67.6424</strong></li>
+              <li><strong>Social proof</strong> — comparatively easiest for the current defense:
+                <strong>sum(Δ²) = 68.3375</strong>,
+                <strong>Spearman = 0.0514</strong>,
+                <strong>Kendall tau = 0.0404</strong>,
+                <strong>Kendall distance = 0.4798</strong></li>
+            </ul>
           </div>
 
           <div class="card">
-            <h3>Pilot takeaway</h3>
+            <h3>Interpretation</h3>
             <p>
-              Subtask B should reward defenses that are robust not only to obvious visibility
-              inflation, but also to subtler cases where appearance rate and ranking move in
-              different directions.
+              The overall picture is consistent: the current defense does not strongly recover the
+              original ranking for any attack family. Social proof is comparatively the easiest
+              case, while scarcity is the most difficult by the primary metric.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Variation across attacks</div>
+          <h2>Some attack instances are much more disruptive than others</h2>
+          <p>
+            Within each family, individual attacks vary substantially in how recoverable they are.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Examples of difficult cases</h3>
+            <ul>
+              <li><strong>Discount framing / Attack 0</strong>:
+                <strong>sum(Δ²) = 86.00</strong>,
+                <strong>Spearman = -0.1644</strong>,
+                <strong>Kendall tau = -0.1111</strong></li>
+              <li><strong>Scarcity / Attack 6</strong>:
+                <strong>sum(Δ²) = 78.35</strong></li>
+              <li><strong>Social proof / Attack 4</strong>:
+                <strong>sum(Δ²) = 81.25</strong></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Examples of milder / more recoverable cases</h3>
+            <ul>
+              <li><strong>Exclusivity / Attack 2</strong>:
+                <strong>sum(Δ²) = 50.65</strong>,
+                one of the mildest cases in the pilot</li>
+              <li><strong>Social proof / Attack 0</strong>:
+                <strong>sum(Δ²) = 56.45</strong>,
+                <strong>Spearman = 0.3290</strong>,
+                <strong>Kendall tau = 0.2603</strong>,
+                the most recoverable case under the current defense</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 1rem;">
+          <h3>Takeaway</h3>
+          <p>
+            This variability suggests that some biased interventions are easier to counteract than
+            others, even within the same attack family. Robust defense therefore requires more than
+            generic instruction-based prompting.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Pilot takeaway</div>
+          <h2>Robust defense under biased language remains an open challenge</h2>
+          <p>
+            The pilot confirms that <strong>Subtask B is non-trivial and meaningful</strong>.
+            A simple defense prompt does not reliably restore fair recommendation behavior:
+            products still move substantially, and overall ranking agreement remains weak.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>What this shows</h3>
+            <ul>
+              <li>The task is not solved by generic instruction-based prompting</li>
+              <li>Robust defense requires more than superficial prompt hardening</li>
+              <li>Future systems should be evaluated on whether they truly preserve the original ranking structure</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Why it matters</h3>
+            <p>
+              Overall, the pilot supports Subtask B as a challenging benchmark for
+              <strong>robust recommendation under cognitively manipulated language</strong>.
             </p>
           </div>
         </div>
