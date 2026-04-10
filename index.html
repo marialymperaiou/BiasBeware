@@ -6,7 +6,7 @@
   <title>BiasBeware | Cognitive Bias in Product Descriptions</title>
   <meta
     name="description"
-    content="BiasBeware is a dataset of product descriptions rephrased using cognitive biases, designed to study how linguistic persuasion affects LLM-driven recommendations."
+    content="BiasBeware is a benchmark dataset of product descriptions rewritten with cognitive biases to study how persuasive language affects LLM-driven recommendations."
   />
   <meta property="og:title" content="BiasBeware" />
   <meta
@@ -142,7 +142,7 @@
       padding: 0.72rem 1rem;
       border-radius: 999px;
       background: linear-gradient(135deg, var(--accent), #6f8cff);
-      color: #08111f;
+      color: #08111f !important;
       font-weight: 800;
       box-shadow: 0 14px 30px rgba(138, 180, 255, 0.25);
     }
@@ -250,6 +250,14 @@
       border-radius: var(--radius);
       padding: 1.2rem;
       box-shadow: var(--shadow);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .stat:hover {
+      transform: translateY(-2px);
+      border-color: rgba(138, 180, 255, 0.28);
     }
 
     .stat .value {
@@ -378,43 +386,17 @@
       font-size: 0.95rem;
     }
 
-    .subtask {
+    .paper {
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 1.25rem;
-    }
-
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr auto;
       gap: 1rem;
-      margin-top: 1rem;
+      align-items: center;
     }
 
-    .metric {
-      padding: 1.1rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-    }
-
-    .metric .metric-name {
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 0.9rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .metric .metric-value {
-      font-size: 1.6rem;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-    }
-
-    .metric small {
-      display: block;
-      margin-top: 0.4rem;
-      color: var(--muted);
+    .paper-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
     }
 
     .code-block {
@@ -458,19 +440,6 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     }
 
-    .paper {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .paper-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-    }
-
     .footer {
       padding: 3rem 0 4rem;
       color: var(--muted);
@@ -508,7 +477,6 @@
     @media (max-width: 980px) {
       .hero-grid,
       .grid-2,
-      .subtask,
       .paper {
         grid-template-columns: 1fr;
       }
@@ -532,8 +500,7 @@
         gap: 0.75rem;
       }
 
-      .stats,
-      .metric-grid {
+      .stats {
         grid-template-columns: 1fr;
       }
 
@@ -556,13 +523,13 @@
       </a>
 
       <nav class="nav-links">
-<a href="#overview">Overview</a>
-<a href="#pipeline">Pipeline</a>
-<a href="#taxonomy">Taxonomy</a>
-<a href="subtask-a.html">Subtask A</a>
-<a href="subtask-b.html">Subtask B</a>
-<a href="subtask-c.html">Subtask C</a>
-<a href="#paper">Paper</a>
+        <a href="#overview">Overview</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#taxonomy">Taxonomy</a>
+        <a href="subtask-a.html">Subtask A</a>
+        <a href="subtask-b.html">Subtask B</a>
+        <a href="subtask-c.html">Subtask C</a>
+        <a href="#paper">Paper</a>
         <a class="nav-cta" href="https://github.com/marialymperaiou/BiasBeware" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
       </nav>
     </div>
@@ -576,8 +543,10 @@
             <span class="badge">When words nudge decisions</span>
             <h1>BiasBeware</h1>
             <p class="lead">
-              A benchmark dataset for studying how cognitive biases hidden in product descriptions
-              influence LLM-driven recommendations, and how systems can detect, explain, and remove them.
+              Modern recommendation systems do not just process products. They also process persuasion.
+              BiasBeware is a benchmark for studying how subtle cognitive-bias cues hidden in product
+              descriptions distort LLM-driven recommendation behavior, and how systems can attribute,
+              defend against, and remove those effects.
             </p>
 
             <div class="kpi-banner">
@@ -601,60 +570,32 @@
             <div class="hero-card-body">
               <h3>Persuasion-aware evaluation for recommendation systems</h3>
               <p>
-                BiasBeware isolates minimal linguistic manipulations so researchers can measure
-                how wording changes ranking, attribution, and debiasing behavior.
+                BiasBeware isolates minimal linguistic manipulations so researchers can measure how
+                wording changes ranking, attribution, defense, and debiasing behavior.
               </p>
             </div>
           </div>
         </div>
 
-        <section id="tldr">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">TL;DR</div>
-    </div>
-
-    <div class="card">
-      <p style="margin-top: 0;">
-        <strong>BiasBeware</strong> is a benchmark for studying how cognitive biases hidden in
-        product descriptions can distort the behavior of LLM-driven recommender systems.
-        Product text often contains persuasive cues such as social proof, scarcity,
-        exclusivity, authority framing, and discount wording. While these cues may seem
-        minor, they can significantly affect recommendation outcomes.
-      </p>
-
-      <p>
-        The benchmark introduces three complementary challenges:
-        <strong>attribution</strong> (identify which description caused a ranking shift),
-        <strong>defense</strong> (maintain fair recommendations despite biased inputs),
-        and <strong>sanitization</strong> (remove manipulative cues while preserving factual content).
-      </p>
-
-      <p style="margin-bottom: 0;">
-        By combining semantic understanding, causal reasoning, robustness, explainability,
-        and controlled rewriting in a realistic consumer-facing setting, BiasBeware opens a
-        new evaluation space for trustworthy NLP and fair recommendation systems.
-      </p>
-    </div>
-  </div>
-</section>
-
         <div class="stats">
-          <div class="stat">
+          <a class="stat" href="subtask-a.html">
             <div class="value">A</div>
-            <div class="label">Attribution: identify the dominant cognitive bias</div>
-          </div>
-          <div class="stat">
+            <div class="label">Attribution: identify which manipulated product caused the observed recommendation outcome</div>
+          </a>
+
+          <a class="stat" href="subtask-b.html">
             <div class="value">B</div>
-            <div class="label">Defense: resist ranking distortions caused by attacks</div>
-          </div>
-          <div class="stat">
+            <div class="label">Defense: maintain fair recommendations under cognitive-bias attacks</div>
+          </a>
+
+          <a class="stat" href="subtask-c.html">
             <div class="value">C</div>
-            <div class="label">Sanitization: remove manipulation while preserving facts</div>
-          </div>
+            <div class="label">Sanitization: rewrite attacked descriptions while preserving product meaning</div>
+          </a>
+
           <div class="stat">
             <div class="value">EMNLP 2025</div>
-            <div class="label">Paper introducing the benchmark and findings</div>
+            <div class="label">Paper introducing the benchmark and its motivating findings</div>
           </div>
         </div>
       </div>
@@ -666,10 +607,10 @@
           <div class="eyebrow">Overview</div>
           <h2>Why BiasBeware matters</h2>
           <p>
-            Modern recommendation systems do not only process product content. They also process
-            persuasion. BiasBeware is designed to evaluate whether models can recognize subtle
-            manipulative cues, maintain robust recommendations, and restore neutrality without
-            discarding meaning.
+            Modern recommendation systems do not just process products. They also process persuasion.
+            BiasBeware is a benchmark for studying how subtle cognitive-bias cues hidden in product
+            descriptions distort LLM-driven recommendation behavior, and how systems can attribute,
+            defend against, and remove those effects.
           </p>
         </div>
 
@@ -678,7 +619,7 @@
             <h3>What the dataset contains</h3>
             <ul>
               <li>Neutral, feature-centered product descriptions</li>
-              <li>Bias-injected variants with minimal localized edits</li>
+              <li>Bias-injected variants with minimal localized manipulations</li>
               <li>A dominant bias label from a predefined taxonomy</li>
               <li>Optional metadata such as product category</li>
             </ul>
@@ -687,10 +628,10 @@
           <div class="card">
             <h3>What it enables</h3>
             <ul>
-              <li>Controlled experiments on how wording affects ranking decisions</li>
-              <li>Benchmarking for attribution, defense, and sanitization</li>
-              <li>Evaluation of faithful rewriting and recommendation repair</li>
-              <li>Analysis of how cognitive bias propagates through language into model behavior</li>
+              <li>Attribution of which manipulated product caused a recommendation shift</li>
+              <li>Defense against unfair rank distortions under biased inputs</li>
+              <li>Sanitization of attacked descriptions while preserving product facts</li>
+              <li>Controlled analysis of how persuasive language affects LLM recommenders</li>
             </ul>
           </div>
         </div>
@@ -703,9 +644,8 @@
           <div class="eyebrow">Pipeline</div>
           <h2>Data annotation process</h2>
           <p>
-            The benchmark follows a controlled multi-stage workflow combining automatic generation
-            with human validation to ensure product facts are preserved while cognitive-bias cues
-            remain explicit, interpretable, and measurable.
+            To construct a controlled benchmark for cognitive bias in product descriptions,
+            BiasBeware adopts a two-stage pipeline combining automatic generation and human validation.
           </p>
         </div>
 
@@ -763,8 +703,8 @@
               <h3>Final dataset structure</h3>
               <p>
                 Each instance includes a neutral description, one or more bias-injected variants,
-                a bias label, and optional metadata. This supports controlled evaluation across all
-                benchmark subtasks.
+                a bias label, and optional metadata. This supports controlled evaluation across
+                Subtask A, Subtask B, and Subtask C.
               </p>
             </div>
           </div>
@@ -772,21 +712,60 @@
 
         <div class="grid-2" style="margin-top: 1rem;">
           <div class="card">
-            <h3>Annotation guarantees</h3>
+            <h3>Summary</h3>
             <ul>
               <li>Bias signals are explicit yet minimally invasive</li>
-              <li>Descriptions remain factually grounded</li>
-              <li>Labels are consistent, interpretable, and reproducible</li>
+              <li>Product descriptions remain factually grounded</li>
+              <li>Annotations are high-quality and reproducible</li>
             </ul>
+            <p>
+              This enables precise analysis of how cognitive biases propagate through language into
+              LLM-driven recommendation systems.
+            </p>
           </div>
 
           <div class="card">
-            <h3>Pilot annotation result</h3>
+            <h3>Controlled evaluation across subtasks</h3>
+            <ul>
+              <li><strong>Subtask A:</strong> attribution</li>
+              <li><strong>Subtask B:</strong> defense</li>
+              <li><strong>Subtask C:</strong> sanitization</li>
+            </ul>
             <p>
-              In the pilot phase, cognitive biases were embedded in an especially explicit way to
-              validate downstream baselines. The four trained annotators achieved perfect agreement:
+              The dataset is structured so that the same underlying products can support causal
+              reasoning, robustness evaluation, and controlled debiasing experiments.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 1rem;">
+          <div class="card">
+            <h3>Pilot data annotation</h3>
+            <p>
+              In the pilot phase, cognitive biases were embedded in their most explicit form in
+              order to validate downstream baselines on clearly manipulated descriptions. Our four
+              trained annotators achieved perfect agreement:
               <strong>100% Fleiss’ κ</strong> and <strong>100% Krippendorff’s α</strong>.
             </p>
+            <p>
+              This confirms that identifying the bias category itself is easy for humans when the
+              signal is explicit, and that the generated descriptions successfully capture the
+              intended cognitive manipulations.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Why the pilot matters</h3>
+            <p>
+              The follow-up pilot study shows that although bias recognition is straightforward for
+              humans, it remains difficult for LLM recommenders and downstream systems. Initial
+              baselines suggest that:
+            </p>
+            <ul>
+              <li><strong>Subtask A:</strong> causal attribution is difficult even for strong models</li>
+              <li><strong>Subtask B:</strong> generic prompt-based defenses are not sufficient</li>
+              <li><strong>Subtask C:</strong> sanitization helps, but still leaves room for improvement</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -898,10 +877,12 @@
         <div class="footer-card">
           <h3 style="margin-top: 0;">BiasBeware</h3>
           <p>
-            A benchmark for studying cognitive bias, recommendation robustness, and controlled debiasing in product descriptions.
+            A benchmark for studying cognitive bias, recommendation robustness, and controlled
+            debiasing in product descriptions.
           </p>
           <p style="margin-bottom: 0;">
-            Built for GitHub Pages. Keep <code>index.html</code> and <code>teaser.png</code> in the same repo directory.
+            Built for GitHub Pages. Keep <code>index.html</code>, <code>teaser.png</code>,
+            <code>A.png</code>, <code>B.png</code>, and <code>c.png</code> in the repo.
           </p>
         </div>
       </div>
