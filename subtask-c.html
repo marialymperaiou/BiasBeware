@@ -524,16 +524,22 @@
         </div>
 
         <div class="card" style="margin-top: 1rem;">
+          <h3>Pilot setup</h3>
+          <p>
+            200 biased descriptions vs their unbiased counterparts. 
+            All biases stem from <strong>intense intervention</strong> (i.e. level 3), thus being easily detectable.
+            As confirmed by the human annotations, people can recognize these biases with 100% accuracy.
+          </p>
           <h3>How to read these numbers</h3>
           <p>
             These values are encouragingly low. <strong>KL = 0.197</strong> means the debiased
             descriptions are still fairly close to the original clean distribution, though not
             identical. <strong>JSD = 0.059</strong> means the overall lexical distributions are
-            very similar.
+            very similar. 
           </p>
           <p>
             In simple terms, the baseline is able to remove some bias while staying reasonably
-            close to the original clean style.
+            close to the original clean style. Are these baseline metrics going to stay promising under more diverse and complex attacks to come? Stay tuned!
           </p>
         </div>
       </div>
