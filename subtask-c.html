@@ -6,7 +6,7 @@
   <title>BiasBeware | Subtask C</title>
   <meta
     name="description"
-    content="BiasBeware Subtask C: Sanitization of attacked product descriptions."
+    content="BiasBeware Subtask C: sanitization of attacked product descriptions."
   />
   <meta property="og:title" content="BiasBeware | Subtask C" />
   <meta
@@ -14,13 +14,12 @@
     content="Can a system remove manipulation without removing meaning?"
   />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="C.png" />
+  <meta property="og:image" content="c.png" />
   <meta name="theme-color" content="#0b1020" />
 
   <style>
     :root {
       --bg: #07111f;
-      --bg-soft: rgba(255, 255, 255, 0.05);
       --card: rgba(255, 255, 255, 0.06);
       --border: rgba(255, 255, 255, 0.12);
       --text: #e9eefb;
@@ -32,13 +31,8 @@
       --max: 1180px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -51,15 +45,8 @@
       line-height: 1.65;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
     .container {
       width: min(var(--max), calc(100% - 2rem));
@@ -116,7 +103,6 @@
       color: var(--muted);
       font-weight: 600;
       font-size: 0.95rem;
-      transition: color 0.2s ease;
     }
 
     .nav-links a:hover,
@@ -133,13 +119,8 @@
       box-shadow: 0 14px 30px rgba(138, 180, 255, 0.25);
     }
 
-    section {
-      padding: 2.5rem 0 1rem;
-    }
-
-    .hero {
-      padding: 4rem 0 2rem;
-    }
+    section { padding: 2.5rem 0 1rem; }
+    .hero { padding: 4rem 0 2rem; }
 
     .hero-grid {
       display: grid;
@@ -324,7 +305,8 @@
 
     @media (max-width: 980px) {
       .hero-grid,
-      .grid-2 {
+      .grid-2,
+      .metric-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -333,10 +315,6 @@
       .nav-inner {
         flex-direction: column;
         align-items: flex-start;
-      }
-
-      .metric-grid {
-        grid-template-columns: 1fr;
       }
 
       .hero {
@@ -357,16 +335,16 @@
         <div>BiasBeware</div>
       </a>
 
-<nav class="nav-links">
-  <a href="index.html#overview">Overview</a>
-  <a href="index.html#pipeline">Pipeline</a>
-  <a href="index.html#taxonomy">Taxonomy</a>
-  <a href="subtask-a.html">Subtask A</a>
-  <a href="subtask-b.html">Subtask B</a>
-  <a href="subtask-c.html" class="active">Subtask C</a>
-  <a href="index.html#paper">Paper</a>
-  <a class="nav-cta" href="https://github.com/marialymperaiou/BiasBeware" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
-</nav>
+      <nav class="nav-links">
+        <a href="index.html#overview">Overview</a>
+        <a href="index.html#pipeline">Pipeline</a>
+        <a href="index.html#taxonomy">Taxonomy</a>
+        <a href="subtask-a.html">Subtask A</a>
+        <a href="subtask-b.html">Subtask B</a>
+        <a href="subtask-c.html" class="active">Subtask C</a>
+        <a href="index.html#paper">Paper</a>
+        <a class="nav-cta" href="https://github.com/marialymperaiou/BiasBeware" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
+      </nav>
     </div>
   </header>
 
@@ -378,14 +356,14 @@
             <div class="eyebrow">BiasBeware · Subtask C</div>
             <h1>Sanitization of Attacked Product Descriptions</h1>
             <p class="lead">
-              Can a system remove manipulation without removing meaning? Subtask C asks
-              participants to rewrite cognitively biased product descriptions so that the
-              manipulative cue disappears while the factual product content remains intact.
+              Can a system remove manipulation without removing meaning? Subtask C asks participants
+              to rewrite product descriptions that have been attacked with cognitive-bias cues so
+              that the manipulative signal is removed while the factual product content stays intact.
             </p>
           </div>
 
           <div class="image-card">
-            <img src="C.png" alt="Illustration for Subtask C sanitization" />
+            <img src="c.png" alt="Illustration for Subtask C sanitization" />
             <div class="caption">
               The sanitization task focuses on restoring neutrality while preserving product facts.
             </div>
@@ -398,11 +376,11 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Goal</div>
-          <h2>Remove persuasion, preserve content</h2>
+          <h2>Remove manipulation, preserve meaning</h2>
           <p>
-            This is a constrained debiasing task. A successful system should produce text
-            that is less manipulative than the attacked version, faithful to the original
-            product, and minimally edited rather than fully rewritten.
+            In Subtask C, participants are given product descriptions that have been subtly attacked
+            with cognitive-bias cues. The goal is to rewrite these descriptions so that the
+            manipulative signal is removed while the factual product content stays intact.
           </p>
         </div>
 
@@ -412,17 +390,17 @@
             <ul>
               <li>Reduce the manipulative signal in the attacked description</li>
               <li>Preserve factual product attributes and identity</li>
-              <li>Avoid unnecessary rewrites and excessive drift</li>
-              <li>Bring model behavior back toward the neutral baseline</li>
+              <li>Remain faithful to the original product content</li>
+              <li>Avoid excessive rewriting and unnecessary drift</li>
             </ul>
           </div>
 
           <div class="card">
             <h3>Why this matters</h3>
             <p>
-              In recommendation settings, wording can distort ranking even when product
-              content remains the same. Subtask C evaluates whether a model can restore
-              neutrality without destroying the information users actually need.
+              Debiasing product descriptions is not only about removing persuasive phrases. A good
+              system must keep what the product is while removing how it is being nudged, making
+              Subtask C a benchmark for controlled debiasing and faithful rewriting.
             </p>
           </div>
         </div>
@@ -435,8 +413,8 @@
           <div class="eyebrow">Evaluation</div>
           <h2>Two complementary dimensions</h2>
           <p>
-            Sanitization is evaluated both by downstream debiasing success and by
-            distributional faithfulness to the original clean reference descriptions.
+            We evaluate sanitization through downstream debiasing success and distributional
+            faithfulness to the clean reference.
           </p>
         </div>
 
@@ -457,7 +435,7 @@
           </div>
 
           <div class="card">
-            <h3>2. Distributional faithfulness</h3>
+            <h3>2. Distributional faithfulness to the clean reference</h3>
             <p>
               Does the rewritten text move back toward the original neutral description distribution?
             </p>
@@ -471,10 +449,19 @@
               <div class="metric">
                 <div class="metric-name">JSD(initial, sanitized)</div>
                 <div class="metric-value">JSD</div>
-                <small>0 means identical distributions; values closer to 0 mean higher similarity.</small>
+                <small>Values closer to 0 indicate higher similarity between distributions.</small>
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="card" style="margin-top: 1rem;">
+          <h3>How to read the metrics</h3>
+          <p>
+            <strong>KL</strong> measures how far the sanitized distribution drifts from the original
+            clean one. <strong>JSD</strong> is a symmetric, bounded companion metric ranging from
+            0 to 1, where 0 means identical distributions.
+          </p>
         </div>
       </div>
     </section>
@@ -485,7 +472,7 @@
           <div class="eyebrow">Pilot baseline</div>
           <h2>Initial zero-shot debiasing result</h2>
           <p>
-            As an initial baseline, the sample data was debiased using Gemini 3 in a zero-shot setting.
+            As an initial baseline, the sample data was debiased using <strong>Gemini 3 (zero-shot)</strong>.
           </p>
         </div>
 
@@ -519,13 +506,49 @@
         </div>
 
         <div class="card" style="margin-top: 1rem;">
-          <h3>Interpretation</h3>
+          <h3>How to read these numbers</h3>
           <p>
-            These pilot values are encouragingly low. They suggest that baseline sanitization can
-            remove some cognitive bias while staying reasonably close to the original neutral style.
-            This makes Subtask C a benchmark for controlled debiasing, faithful rewriting, and
-            robust recommendation repair.
+            These values are encouragingly low. <strong>KL = 0.197</strong> means the debiased
+            descriptions are still fairly close to the original clean distribution, though not
+            identical. <strong>JSD = 0.059</strong> means the overall lexical distributions are
+            very similar.
           </p>
+          <p>
+            In simple terms, the baseline is able to remove some bias while staying reasonably
+            close to the original clean style.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Takeaway</div>
+          <h2>Controlled debiasing, faithful rewriting, robust recommendation repair</h2>
+          <p>
+            Subtask C is about more than rewriting text. It is about restoring neutrality without
+            destroying content.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>What participants must learn</h3>
+            <ul>
+              <li>Identify and remove subtle manipulative cues</li>
+              <li>Preserve product facts and product identity</li>
+              <li>Bring model behavior back toward the neutral baseline</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Why it is important</h3>
+            <p>
+              This makes Subtask C a benchmark for <strong>controlled debiasing</strong>,
+              <strong>faithful rewriting</strong>, and <strong>robust recommendation repair</strong>.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -535,7 +558,8 @@
         <div class="footer-card">
           <h3 style="margin-top: 0;">Back to BiasBeware</h3>
           <p>
-            Return to the main page for the dataset overview, annotation pipeline, taxonomy, and paper reference.
+            Return to the main page for the dataset overview, annotation pipeline, taxonomy, and
+            paper reference.
           </p>
           <p style="margin-bottom: 0;">
             <a href="index.html" style="font-weight: 800; color: var(--text);">Open main page →</a>
