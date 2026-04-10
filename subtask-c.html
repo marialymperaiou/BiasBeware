@@ -161,17 +161,24 @@
       overflow: hidden;
     }
 
+    .image-card {
+      padding: 0.75rem;
+    }
+
     .image-card img {
       width: 100%;
       height: auto;
-      object-fit: cover;
+      display: block;
+      object-fit: contain;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.02);
     }
 
     .image-card .caption {
-      padding: 1rem 1.2rem 1.2rem;
+      padding: 1rem 1.2rem 0.6rem;
       color: var(--muted);
       font-size: 0.96rem;
-      border-top: 1px solid var(--border);
+      border-top: none;
     }
 
     .section-head {
@@ -411,31 +418,16 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Evaluation</div>
-          <h2>Two complementary dimensions</h2>
+          <h2>Distributional faithfulness to the clean reference</h2>
           <p>
-            We evaluate sanitization through downstream debiasing success and distributional
-            faithfulness to the clean reference.
+            We evaluate sanitization through how closely the rewritten descriptions return to the
+            original clean distribution.
           </p>
         </div>
 
         <div class="grid-2">
           <div class="card">
-            <h3>1. Downstream debiasing success</h3>
-            <p>
-              Does the rewritten description reduce the ranking distortion caused by the attack?
-            </p>
-
-            <div class="metric-grid">
-              <div class="metric">
-                <div class="metric-name">Average rank displacement</div>
-                <div class="metric-value">avg|Δ|</div>
-                <small>Lower is better. A value of 0 means full restoration to the neutral baseline.</small>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3>2. Distributional faithfulness to the clean reference</h3>
+            <h3>Primary metric: KL divergence</h3>
             <p>
               Does the rewritten text move back toward the original neutral description distribution?
             </p>
@@ -446,21 +438,39 @@
                 <div class="metric-value">KL</div>
                 <small>Lower values mean the sanitized set is lexically closer to the clean reference.</small>
               </div>
+            </div>
+
+            <p style="margin-top: 1rem;">
+              <strong>Interpretation:</strong> \(D_{\mathrm{KL}} = 0\) means the two distributions are identical.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Secondary metric: JSD</h3>
+            <p>
+              As a bounded, symmetric companion metric, we also report Jensen–Shannon divergence.
+            </p>
+
+            <div class="metric-grid">
               <div class="metric">
                 <div class="metric-name">JSD(initial, sanitized)</div>
                 <div class="metric-value">JSD</div>
-                <small>Values closer to 0 indicate higher similarity between distributions.</small>
+                <small>Values closer to 0 indicate higher similarity between the sanitized and clean distributions.</small>
+              </div>
+              <div class="metric">
+                <div class="metric-name">Range</div>
+                <div class="metric-value">0–1</div>
+                <small>0 means identical distributions; values closer to 1 indicate greater drift.</small>
               </div>
             </div>
           </div>
         </div>
 
         <div class="card" style="margin-top: 1rem;">
-          <h3>How to read the metrics</h3>
+          <h3>What we provide</h3>
           <p>
-            <strong>KL</strong> measures how far the sanitized distribution drifts from the original
-            clean one. <strong>JSD</strong> is a symmetric, bounded companion metric ranging from
-            0 to 1, where 0 means identical distributions.
+            Both <strong>KL</strong> and <strong>JSD</strong> calculation functions are provided
+            to participants for direct evaluation of their rewritten descriptions.
           </p>
         </div>
       </div>
@@ -525,7 +535,7 @@
       <div class="container">
         <div class="section-head">
           <div class="eyebrow">Takeaway</div>
-          <h2>Controlled debiasing, faithful rewriting, robust recommendation repair</h2>
+          <h2>Controlled debiasing and distribution-preserving sanitization</h2>
           <p>
             Subtask C is about more than rewriting text. It is about restoring neutrality without
             destroying content.
@@ -538,7 +548,7 @@
             <ul>
               <li>Identify and remove subtle manipulative cues</li>
               <li>Preserve product facts and product identity</li>
-              <li>Bring model behavior back toward the neutral baseline</li>
+              <li>Return the description distribution toward the neutral baseline</li>
             </ul>
           </div>
 
@@ -546,7 +556,8 @@
             <h3>Why it is important</h3>
             <p>
               This makes Subtask C a benchmark for <strong>controlled debiasing</strong>,
-              <strong>faithful rewriting</strong>, and <strong>robust recommendation repair</strong>.
+              <strong>faithful rewriting</strong>, and
+              <strong>distribution-preserving sanitization</strong>.
             </p>
           </div>
         </div>
