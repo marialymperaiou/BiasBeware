@@ -386,6 +386,10 @@ Participants must learn how to:
 
 This makes Subtask C a benchmark for **controlled debiasing, faithful rewriting, and robust recommendation repair**.
 
+# Check our website
+
+[BiasBeware website](https://marialymperaiou.github.io/BiasBeware/)
+
 # Paper reference
 
 For reference, check our EMNLP 2025 paper:
