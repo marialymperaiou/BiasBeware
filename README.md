@@ -357,6 +357,7 @@ This is encouraging for the benchmark design. It shows that:
 Overall, the pilot supports Subtask B as a challenging benchmark for **robust recommendation under cognitively manipulated language**.
 ---
 
+
 ## Subtask C — Sanitization of Attacked Product Descriptions
 
 Can a system **remove manipulation without removing meaning**?
@@ -372,28 +373,15 @@ In other words, the ideal system should keep *what the product is*, while removi
 
 ### What we evaluate
 
-We evaluate sanitization along two complementary dimensions:
+We evaluate sanitization through **distributional faithfulness to the clean reference**.
 
-#### 1. Downstream debiasing success
-Does the rewritten description reduce the ranking distortion caused by the attack?
-
-We measure this using average rank displacement:
-
-```
-avg|Δ|
-```
-
-Lower is better.  
-A value of **0** means the attacked product’s position has been fully restored to the neutral baseline.
-
-#### 2. Distributional faithfulness to the clean reference
+#### Primary metric: KL divergence
 Does the rewritten text move back toward the original neutral description distribution?
 
 We measure this using **KL divergence** between the token distribution of the sanitized set and the original clean set:
 
-```
 KL(initial || sanitized)
-```
+
 
 where:
 - \(P_{\text{initial}}\) = the distribution of the original clean descriptions
@@ -404,13 +392,16 @@ where:
 - Lower values mean the sanitized descriptions are lexically closer to the clean reference
 - Higher values mean more drift from the original neutral style
 
-Complementarily: We also report **Jensen–Shannon divergence (JSD)** as a symmetric, bounded companion metric:
+#### Secondary metric: Jensen–Shannon divergence (JSD)
 
-```
-JSD(initial || sanitized)
+As a bounded, symmetric companion metric, we also report:
+
+JSD(initial, sanitized)
+
+with
 
 0 ≤ JSD(initial, sanitized) ≤ 1
-```
+
 
 - **0** = identical distributions  
 - values closer to **0** = highly similar  
@@ -423,9 +414,9 @@ Both KL and JSD calculation functions are provided.
 As an initial baseline, we debias our sample data using **Gemini 3 (zero-shot)**.
 
 > **Prompt**:
-```
+
 Debias the following product descriptions
-```
+
 
 Results:
 
@@ -449,9 +440,10 @@ Subtask C is about more than rewriting text — it is about **restoring neutrali
 Participants must learn how to:
 - identify and remove subtle manipulative cues,
 - preserve product facts,
-- and bring model behavior back toward the neutral baseline.
+- and return the description distribution toward the neutral baseline.
 
-This makes Subtask C a benchmark for **controlled debiasing, faithful rewriting, and robust recommendation repair**.
+This makes Subtask C a benchmark for **controlled debiasing, faithful rewriting, and distribution-preserving sanitization**.
+
 
 # Check our website
 
