@@ -17,6 +17,16 @@
   <meta property="og:image" content="C.png" />
   <meta name="theme-color" content="#0b1020" />
 
+  <script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      displayMath: [['\\[', '\\]'], ['$$', '$$']]
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
   <style>
     :root {
       --bg: #07111f;
@@ -440,9 +450,7 @@
               </div>
             </div>
 
-            <p style="margin-top: 1rem;">
-              <strong>Interpretation:</strong> \(D_{\mathrm{KL}} = 0\) means the two distributions are identical.
-            </p>
+            <p><strong>Interpretation:</strong> <span>\(D_{\mathrm{KL}} = 0\)</span> means the two distributions are identical.</p>
           </div>
 
           <div class="card">
