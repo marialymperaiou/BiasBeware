@@ -259,7 +259,7 @@ Overall, the pilot supports Subtask A as a challenging benchmark for **causal re
 
 Can a system **maintain fair recommendations under manipulated descriptions**?
 
-In **Subtask B**, participants are given recommendation settings with competing products where one or more descriptions may have been attacked using cognitive-bias cues. The original pre-attack ranking is provided, and the objective is to reduce unfair rank shifts caused by manipulated language.
+In **Subtask B**, participants are given recommendation settings with competing products where one or more descriptions may have been attacked using cognitive-bias cues. The model which participants are required to run as recommender is Qwen3-0.6B, which can be run in any available system (Google Colab or Kaggle GPUs). The recommendation code will also be provided. Moreover, the original pre-attack ranking is provided, and the objective is to reduce unfair rank shifts caused by manipulated language.
 
 This is a **robustness** task: a successful system should:
 - detect or neutralize the effect of biased product descriptions,
